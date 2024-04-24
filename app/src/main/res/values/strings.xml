@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Backpack manager</string>
+    <string name="search">Search</string>
+    <string name="items">Items</string>
+    <string name="backpack">Backpack</string>
+    <string name="groups">Groups</string>
+</resources>
