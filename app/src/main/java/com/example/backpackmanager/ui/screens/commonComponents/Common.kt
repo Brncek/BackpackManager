@@ -47,8 +47,8 @@ import com.example.backpackmanager.ui.theme.BackpackManagerTheme
 @Composable
 fun TopBar(
     searchValue: String,
-    searchValueOnChange: (String) -> Unit,
-    setingsButtonAction: () -> Unit
+    setingsButtonAction: () -> Unit,
+    searchValueOnChange: (String) -> Unit
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -78,7 +78,9 @@ fun TopBar(
 @Composable
 fun BottomBar(
     selectedTab: Int,
-    tabOnclick:  (Int) -> Unit
+    firstTabAction: () -> Unit,
+    secondTabAction: () -> Unit,
+    thirdTabAction: () -> Unit,
 ) {
     val items = listOf( stringResource(id = R.string.items),
         stringResource(id = R.string.backpack),
@@ -91,7 +93,14 @@ fun BottomBar(
                     icon = { Icon(Icons.Outlined.ArrowDropDown, contentDescription = item) },
                     label = { Text(item) },
                     selected = selectedTab == index,
-                    onClick = { tabOnclick(index) },
+                    onClick = { if (index == 0) {
+                                    firstTabAction()
+                                } else if (index == 1) {
+                                    secondTabAction()
+                                } else {
+                                    thirdTabAction()
+                                }
+                              },
                     //TODO::colors
                 )
             }

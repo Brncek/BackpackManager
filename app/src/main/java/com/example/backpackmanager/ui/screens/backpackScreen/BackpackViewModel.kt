@@ -1,11 +1,10 @@
 package com.example.backpackmanager.ui.screens.backpackScreen
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.lifecycle.ViewModel
 
-class BackpackViewmodel {
+class BackpackViewmodel : ViewModel() {
+
 }
-
 
 data class BackpackUIState(
     val searchString : String = "",
