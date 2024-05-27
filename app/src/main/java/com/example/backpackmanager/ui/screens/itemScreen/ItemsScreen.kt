@@ -16,11 +16,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.backpackmanager.R
+import com.example.backpackmanager.ui.ViewModelCreator
 import com.example.backpackmanager.ui.navigation.ScreenDest
 import com.example.backpackmanager.ui.screens.commonComponents.DetailSheet
 import com.example.backpackmanager.ui.screens.commonComponents.TopBar
 import com.example.backpackmanager.ui.theme.BackpackManagerTheme
+import kotlin.random.Random
 
 object ItemsScreenDestination : ScreenDest {
     override val route = "itemsScreen"
@@ -28,7 +31,8 @@ object ItemsScreenDestination : ScreenDest {
 
 @Composable
 fun ItemScreen(
-        setingsButtonAction: () -> Unit
+        setingsButtonAction: () -> Unit,
+        viewModel: ItemsViewModel = viewModel(factory = ViewModelCreator.Factory)
     ) {
     var searchVal by remember { mutableStateOf("") } //TODO: View model move
     Column {
@@ -41,6 +45,13 @@ fun ItemScreen(
 @Composable
 fun Inner() {
     var show by remember { mutableStateOf(false) } //TODO: View model move
+    var imageID by remember { mutableIntStateOf(0) } //TODO: View model move
+
+    if (Random.nextBoolean()) {
+        imageID = R.drawable.noitemimage1
+    } else {
+        imageID = R.drawable.noitemimage2
+    }
 
     Button(onClick = {show = true}) {
         Text(text = "Show bottom")
@@ -52,7 +63,7 @@ fun Inner() {
         name = "TEST",
         description = "TEST",
         descriptionName = "Test",
-        painter =  painterResource(id = R.drawable.testimage),
+        painter =  painterResource(id = imageID),
         onChangeShow = {show = it}
     ) {
         Row {

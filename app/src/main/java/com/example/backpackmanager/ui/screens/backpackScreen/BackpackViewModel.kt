@@ -1,12 +1,10 @@
 package com.example.backpackmanager.ui.screens.backpackScreen
 
 import androidx.lifecycle.ViewModel
+import com.example.backpackmanager.database.DataRepositary
 
-class BackpackViewmodel : ViewModel() {
+class BackpackViewModel(private val dataRepositary: DataRepositary) : ViewModel() {
 
 }
 
-data class BackpackUIState(
-    val searchString : String = "",
-    val itemList : List<String> = listOf()
-)
+
