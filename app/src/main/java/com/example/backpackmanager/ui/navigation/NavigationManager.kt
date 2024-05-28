@@ -15,8 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.backpackmanager.ui.screens.backpackScreen.BackpackScreen
 import com.example.backpackmanager.ui.screens.backpackScreen.BackpackScreenDestination
 import com.example.backpackmanager.ui.screens.commonComponents.BottomBar
+import com.example.backpackmanager.ui.screens.editingScreen.EditingScreen
+import com.example.backpackmanager.ui.screens.editingScreen.ItemEditScreenDestination
+import com.example.backpackmanager.ui.screens.groupsScreen.GroupScreen
 import com.example.backpackmanager.ui.screens.groupsScreen.GroupScreenDestination
 import com.example.backpackmanager.ui.screens.itemScreen.ItemScreen
 import com.example.backpackmanager.ui.screens.itemScreen.ItemsScreenDestination
@@ -39,63 +43,35 @@ fun NavigationManager(
 
             selectedItem = 0
 
-            Scaffold (
-                bottomBar = { BottomBar(selectedTab = selectedItem,
-                                        firstTabAction = {},
-                                        secondTabAction = { navController.navigate(route = BackpackScreenDestination.route)},
-                                        thirdTabAction = { navController.navigate(route = GroupScreenDestination.route)} )}
-            ) {
-                innerPadding -> Column(
-                    modifier = Modifier
-                        .padding(innerPadding),
-                ) {
-                    ItemScreen( setingsButtonAction = { navController.navigate(route = SetingsScreenDestination.route) })
-                }
-            }
+            ItemScreen( setingsButtonAction = { navController.navigate(route = SetingsScreenDestination.route) },
+                        addItemButtonAction = { navController.navigate(route = ItemEditScreenDestination.route) },
+                        bottomBar = { BottomBar(selectedTab = selectedItem,
+                                                firstTabAction = {},
+                                                secondTabAction = { navController.navigate(route = BackpackScreenDestination.route)},
+                                                thirdTabAction = { navController.navigate(route = GroupScreenDestination.route)} )})
         }
 
         composable(route = BackpackScreenDestination.route) {
 
             selectedItem = 1
 
-            Scaffold (
-                bottomBar = { BottomBar(selectedTab = selectedItem,
-                    firstTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)},
-                    secondTabAction = {},
-                    thirdTabAction = { navController.navigate(route = GroupScreenDestination.route)} )}
-            ) {
-                    innerPadding -> Column(
-                modifier = Modifier
-                    .padding(innerPadding),
-            ) {
-                //TODO::
-                Column {
-                    Text(text = "BACKPACK TEST")
-                }        
-            }
-            }
+            BackpackScreen( setingsButtonAction = { navController.navigate(route = SetingsScreenDestination.route) },
+                            bottomBar = { BottomBar(selectedTab = selectedItem,
+                                                    firstTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)},
+                                                    secondTabAction = {},
+                                                    thirdTabAction = { navController.navigate(route = GroupScreenDestination.route)} )})
         }
 
         composable(route = GroupScreenDestination.route) {
 
             selectedItem = 2
 
-            Scaffold (
-                bottomBar = { BottomBar(selectedTab = selectedItem,
-                    firstTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)},
-                    secondTabAction = { navController.navigate(route = BackpackScreenDestination.route)},
-                    thirdTabAction = {} )}
-            ) {
-                    innerPadding -> Column(
-                modifier = Modifier
-                    .padding(innerPadding),
-            ) {
-                //TODO::
-                Column {
-                    Text(text = "Group TEST")
-                }
-            }
-            }
+
+            GroupScreen(setingsButtonAction =  { navController.navigate(route = SetingsScreenDestination.route) },
+                        bottomBar = { BottomBar(selectedTab = selectedItem,
+                                                firstTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)},
+                                                secondTabAction = { navController.navigate(route = BackpackScreenDestination.route)},
+                                                thirdTabAction = {} )})
         }
 
         composable(route = SetingsScreenDestination.route) {
@@ -103,6 +79,10 @@ fun NavigationManager(
                 //TODO::
                 Text(text = "Setings TEST")
             }
+        }
+
+        composable(route = ItemEditScreenDestination.route) {
+            EditingScreen(onLeave = {navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)})
         }
     }
 }

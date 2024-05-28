@@ -1,1 +1,238 @@
 package com.example.backpackmanager.ui.screens.editingScreen
+
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.sourceInformation
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
+import com.example.backpackmanager.R
+import com.example.backpackmanager.ui.ViewModelCreator
+import com.example.backpackmanager.ui.navigation.ScreenDest
+import com.example.backpackmanager.ui.screens.itemScreen.ItemsList
+import kotlinx.coroutines.launch
+
+object ItemEditScreenDestination : ScreenDest {
+    override val route = "itemEditScreen"
+}
+
+@Composable
+fun EditingScreen (
+    editingScreenViewModel: EditingScreenViewModel = viewModel(factory = ViewModelCreator.Factory),
+    onLeave: () -> Unit = {}
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+        uri: Uri? -> editingScreenViewModel.change(editingScreenViewModel.itemUiState.itemDetails.copy(picturePath = uri.toString()))
+    }
+
+    var show by remember { mutableStateOf(false) }
+
+    Scaffold(
+      bottomBar = {
+          Button(onClick = {coroutineScope.launch {editingScreenViewModel.saveItem(context) }
+                            onLeave()
+                           }, modifier = Modifier
+              .fillMaxWidth()
+              .padding(10.dp),
+              enabled = editingScreenViewModel.itemUiState.valid) {
+              Text(text = stringResource(id = R.string.SaveItem))
+          }
+      }
+    ) { innerPadding -> Column (modifier = Modifier
+        .fillMaxSize()
+        .padding(innerPadding)) {
+
+        Text(text = stringResource(R.string.EditorTytle), modifier = Modifier
+            .fillMaxWidth().padding(0.dp, 25.dp, 0.dp, 5.dp), fontSize = 30.sp,
+            textAlign = TextAlign.Center)
+
+        TypableItems(itemDetails = editingScreenViewModel.itemUiState.itemDetails, onValueChange = {editingScreenViewModel.change(it)})
+        Spacer(modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp))
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Text(text = stringResource(id = R.string.TypeText), modifier = Modifier
+                .padding(15.dp, 5.dp, 0.dp, 5.dp), fontSize = 30.sp)
+            Text(text = editingScreenViewModel.itemUiState.itemDetails.type, modifier = Modifier
+                .padding(10.dp, 5.dp), fontSize = 30.sp)
+        }
+
+        Button(onClick = {show = true}, modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)) {
+            Text(text = stringResource(id = R.string.changeType))
+        }
+
+        Button(onClick = { launcher.launch("image/*") }, modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)) {
+            Text(text = stringResource(id = R.string.loadImage))
+        }
+
+        HorizontalDivider(thickness = 3.dp, modifier = Modifier.padding(10.dp))
+
+        Image(
+            painter = rememberAsyncImagePainter(model = editingScreenViewModel.itemUiState.itemDetails.picturePath.toUri(),
+                                                error = painterResource(id = R.drawable.noimage),
+                                                fallback = painterResource(id = R.drawable.noimage)),
+            contentDescription = editingScreenViewModel.itemUiState.itemDetails.name,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        TypeSelectSheet(show = show, itemDetails = editingScreenViewModel.itemUiState.itemDetails
+            ,onValueChange = {editingScreenViewModel.change(it)}, onChangeShow = {show = it})
+        }
+    }
+}
+
+@Composable
+fun TypableItems(
+    itemDetails: ItemDetails,
+    onValueChange: (ItemDetails) -> Unit
+) {
+    Column {
+        OutlinedTextField(
+            value = itemDetails.name,
+            onValueChange = {onValueChange(itemDetails.copy(name = it))},
+            label = { Text(text = stringResource(id = R.string.itemName) ) },
+            textStyle = TextStyle(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        )
+
+        OutlinedTextField (
+            value = itemDetails.weight.toString(),
+            onValueChange = {onValueChange(itemDetails.copy(weight = it))},
+            label = { Text(text = stringResource(id = R.string.itemWeight) ) },
+            textStyle = TextStyle(),
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TypeSelectSheet(
+    show: Boolean,
+    onChangeShow: (Boolean) -> Unit,
+    itemDetails: ItemDetails,
+    onValueChange: (ItemDetails) -> Unit
+) {
+    val sheetState = rememberModalBottomSheetState()
+
+    if (show) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                onChangeShow(false)
+            },
+            sheetState = sheetState
+        ) {
+            Text(text = stringResource(id = R.string.selectType), modifier = Modifier
+                .fillMaxWidth()
+                .padding(25.dp, 5.dp), fontSize = 30.sp)
+            TypeButtons(itemDetails = itemDetails, onValueChange = {onValueChange(it)})
+            Spacer(modifier = Modifier.padding(0.dp, 40.dp))
+        }
+    }
+}
+
+@Composable
+fun TypeButtons(
+    itemDetails: ItemDetails,
+    onValueChange: (ItemDetails) -> Unit
+) {
+    Column {
+        TypeSelectButton(type = "Other", name = stringResource(id = R.string.typeOther), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Other"))})
+        TypeSelectButton(type = "Sleep", name = stringResource(id = R.string.typeSleep), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Sleep"))})
+        TypeSelectButton(type = "Fire", name = stringResource(id = R.string.typeFire), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Fire"))})
+        TypeSelectButton(type = "Shelter", name = stringResource(id = R.string.typeShelter), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Shelter"))})
+        TypeSelectButton(type = "Food", name = stringResource(id = R.string.typeFood), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Food"))})
+        TypeSelectButton(type = "Water", name = stringResource(id = R.string.typeWater), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Water"))})
+        TypeSelectButton(type = "Clothes", name = stringResource(id = R.string.typeClothes), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Clothes"))})
+        TypeSelectButton(type = "Electronics", name = stringResource(id = R.string.typeElectronics), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Electronics"))})
+        TypeSelectButton(type = "Tools", name = stringResource(id = R.string.typeTools), actual = itemDetails.type,
+            onClick = {onValueChange(itemDetails.copy(type = "Tools"))})
+    }
+}
+
+@Composable
+fun TypeSelectButton(
+    type: String,
+    name: String,
+    actual: String,
+    onClick: (String) -> Unit
+) {
+    Row (modifier = Modifier.fillMaxWidth())
+    {
+        RadioButton(
+            selected = actual == type ,
+            onClick = { onClick(type) },
+            modifier = Modifier.padding(10.dp, 2.dp)
+        )
+
+        Text(text = name, modifier = Modifier.align(Alignment.CenterVertically))
+    }
+}
+
+
+
+//Types
+//Other
+//Sleep
+//Fire
+//Shelter
+//Food
+//Water
+//Clothes
+//Electronics
+//Tools

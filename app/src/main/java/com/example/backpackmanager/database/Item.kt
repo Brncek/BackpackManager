@@ -9,9 +9,20 @@ data class Item(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val name: String = "",
-    val type: String = "",
+    val type: String = "Other",
     val weight: Int = 0,
     val picturePath: String = "",
-    val selected: Char = 'F'
+    val selected: String = "F"
 )
+
+//Types
+//Other
+//Sleep
+//Fire
+//Shelter
+//Food
+//Water
+//Clothes
+//Electronics
+//Tools
 

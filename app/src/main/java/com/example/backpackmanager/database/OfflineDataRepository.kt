@@ -2,22 +2,24 @@ package com.example.backpackmanager.database
 
 import kotlinx.coroutines.flow.Flow
 
-class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemDao: GroupItemDao) :DataRepositary {
+class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemDao: GroupItemDao) :DataRepository {
     override fun getAllGroupItems(): Flow<List<GroupItem>> = groupItemDao.getAllGroupItems()
 
     override fun getGroupSearched(search: String): Flow<List<GroupItem>> = groupItemDao.getGroupSearched(search)
-
-    override fun getGroupItem(id: Int): Flow<GroupItem> = groupItemDao.getGroupItem(id)
+    override fun getGroupItem(name: String): Flow<GroupItem> = groupItemDao.getGroupItem(name)
 
     override suspend fun insertGroup(item: GroupItem) = groupItemDao.insertGroup(item)
 
     override suspend fun updateGroup(item: GroupItem) = groupItemDao.updateGroup(item)
 
     override suspend fun deleteGroup(item: GroupItem) = groupItemDao.deleteGroup(item)
-
-    override suspend fun deleteGroup(id: Int) = groupItemDao.deleteItemFromGroups(id)
+    override suspend fun deleteGroup(name: String) = groupItemDao.deleteGroup(name)
 
     override suspend fun deleteItemFromGroups(id: Int) = groupItemDao.deleteItemFromGroups(id)
+
+    override fun getGroupsNames(): Flow<List<String>> = groupItemDao.getGrouptNames()
+
+    override fun getGroupsNamesSearch(search: String): Flow<List<String>> = groupItemDao.getGrouptNamesSearch(search)
 
     override fun getAllItems(): Flow<List<Item>> = itemDao.getAllItems()
 

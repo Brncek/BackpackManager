@@ -16,8 +16,14 @@ interface GroupItemDao {
     @Query("Select * from groupItems WHERE instr(groupName, :search) > 0 order by groupName asc")
     fun getGroupSearched(search: String): Flow<List<GroupItem>>
 
-    @Query("Select * from groupItems where groupId = :id")
-    fun getGroupItem(id: Int): Flow<GroupItem>
+    @Query("Select * from groupItems where groupName = :name")
+    fun getGroupItem(name: String): Flow<GroupItem>
+
+    @Query("select groupName from groupItems")
+    fun getGrouptNames() :Flow<List<String>>
+
+    @Query("select groupName from groupItems where instr(groupName, :search) > 0 order by groupName asc")
+    fun getGrouptNamesSearch(search: String) :Flow<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGroup(item: GroupItem)
@@ -27,8 +33,8 @@ interface GroupItemDao {
     @Delete
     suspend fun deleteGroup(item: GroupItem)
 
-    @Query("DELETE FROM groupItems WHERE groupId = :id")
-    suspend fun deleteGroup(id: Int)
+    @Query("DELETE FROM groupItems WHERE groupName = :name")
+    suspend fun deleteGroup(name: String)
 
     @Query("DELETE FROM groupItems WHERE itemId = :id")
     suspend fun deleteItemFromGroups(id : Int)
