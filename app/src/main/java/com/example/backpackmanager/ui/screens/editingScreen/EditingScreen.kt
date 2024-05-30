@@ -7,9 +7,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +25,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,9 +46,11 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.backpackmanager.R
+import com.example.backpackmanager.database.Type
 import com.example.backpackmanager.ui.ViewModelCreator
 import com.example.backpackmanager.ui.navigation.ScreenDest
 import com.example.backpackmanager.ui.screens.itemScreen.ItemsList
+import com.example.backpackmanager.ui.screens.setingsScreen.TypeCard
 import kotlinx.coroutines.launch
 
 object ItemEditScreenDestination : ScreenDest {
@@ -57,6 +64,7 @@ fun EditingScreen (
 ) {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val types by editingScreenViewModel.typeUiState.collectAsState()
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         uri: Uri? -> editingScreenViewModel.change(editingScreenViewModel.itemUiState.itemDetails.copy(picturePath = uri.toString()))
@@ -80,7 +88,8 @@ fun EditingScreen (
         .padding(innerPadding)) {
 
         Text(text = stringResource(R.string.EditorTytle), modifier = Modifier
-            .fillMaxWidth().padding(0.dp, 25.dp, 0.dp, 5.dp), fontSize = 30.sp,
+            .fillMaxWidth()
+            .padding(0.dp, 25.dp, 0.dp, 5.dp), fontSize = 30.sp,
             textAlign = TextAlign.Center)
 
         TypableItems(itemDetails = editingScreenViewModel.itemUiState.itemDetails, onValueChange = {editingScreenViewModel.change(it)})
@@ -118,7 +127,7 @@ fun EditingScreen (
         )
 
         TypeSelectSheet(show = show, itemDetails = editingScreenViewModel.itemUiState.itemDetails
-            ,onValueChange = {editingScreenViewModel.change(it)}, onChangeShow = {show = it})
+            ,onValueChange = {editingScreenViewModel.change(it)}, onChangeShow = {show = it}, types = types.typeList)
         }
     }
 }
@@ -158,7 +167,8 @@ fun TypeSelectSheet(
     show: Boolean,
     onChangeShow: (Boolean) -> Unit,
     itemDetails: ItemDetails,
-    onValueChange: (ItemDetails) -> Unit
+    onValueChange: (ItemDetails) -> Unit,
+    types: List<Type>
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -172,7 +182,7 @@ fun TypeSelectSheet(
             Text(text = stringResource(id = R.string.selectType), modifier = Modifier
                 .fillMaxWidth()
                 .padding(25.dp, 5.dp), fontSize = 30.sp)
-            TypeButtons(itemDetails = itemDetails, onValueChange = {onValueChange(it)})
+            TypeButtons(itemDetails = itemDetails, onValueChange = {onValueChange(it)}, types)
             Spacer(modifier = Modifier.padding(0.dp, 40.dp))
         }
     }
@@ -181,27 +191,29 @@ fun TypeSelectSheet(
 @Composable
 fun TypeButtons(
     itemDetails: ItemDetails,
-    onValueChange: (ItemDetails) -> Unit
+    onValueChange: (ItemDetails) -> Unit,
+    types: List<Type>
 ) {
-    Column {
+    Column (modifier = Modifier.height(270.dp)) {
+
         TypeSelectButton(type = "Other", name = stringResource(id = R.string.typeOther), actual = itemDetails.type,
             onClick = {onValueChange(itemDetails.copy(type = "Other"))})
-        TypeSelectButton(type = "Sleep", name = stringResource(id = R.string.typeSleep), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Sleep"))})
-        TypeSelectButton(type = "Fire", name = stringResource(id = R.string.typeFire), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Fire"))})
-        TypeSelectButton(type = "Shelter", name = stringResource(id = R.string.typeShelter), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Shelter"))})
-        TypeSelectButton(type = "Food", name = stringResource(id = R.string.typeFood), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Food"))})
-        TypeSelectButton(type = "Water", name = stringResource(id = R.string.typeWater), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Water"))})
-        TypeSelectButton(type = "Clothes", name = stringResource(id = R.string.typeClothes), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Clothes"))})
-        TypeSelectButton(type = "Electronics", name = stringResource(id = R.string.typeElectronics), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Electronics"))})
-        TypeSelectButton(type = "Tools", name = stringResource(id = R.string.typeTools), actual = itemDetails.type,
-            onClick = {onValueChange(itemDetails.copy(type = "Tools"))})
+
+
+        Text(text = stringResource(id = R.string.UserTypes), modifier = Modifier
+            .fillMaxWidth()
+            .padding(25.dp, 5.dp), fontSize = 20.sp)
+
+        HorizontalDivider(thickness = 3.dp, modifier = Modifier.padding(10.dp))
+
+        LazyColumn {
+            items(items = types, key = { it.typeName }) {
+                    type -> TypeSelectButton(type = type.typeName, name = type.typeName, actual = itemDetails.type,
+                        onClick = {onValueChange(itemDetails.copy(type = type.typeName))})
+            }
+        }
+
+        HorizontalDivider(thickness = 3.dp, modifier = Modifier.padding(10.dp, 10.dp, 10.dp, 35.dp))
     }
 }
 
@@ -224,15 +236,3 @@ fun TypeSelectButton(
     }
 }
 
-
-
-//Types
-//Other
-//Sleep
-//Fire
-//Shelter
-//Food
-//Water
-//Clothes
-//Electronics
-//Tools

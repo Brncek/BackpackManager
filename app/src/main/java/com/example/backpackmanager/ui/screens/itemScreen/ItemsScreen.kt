@@ -18,13 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.backpackmanager.R
 import com.example.backpackmanager.database.Item
 import com.example.backpackmanager.ui.ViewModelCreator
+import com.example.backpackmanager.ui.navigation.ItemMover
 import com.example.backpackmanager.ui.navigation.ScreenDest
 import com.example.backpackmanager.ui.screens.commonComponents.DetailSheet
 import com.example.backpackmanager.ui.screens.commonComponents.ItemCard
@@ -41,7 +40,6 @@ import com.example.backpackmanager.ui.screens.commonComponents.TopBar
 import com.example.backpackmanager.ui.theme.BackpackManagerTheme
 import kotlinx.coroutines.launch
 import java.util.Locale
-import kotlin.random.Random
 
 object ItemsScreenDestination : ScreenDest {
     override val route = "itemsScreen"
@@ -51,7 +49,7 @@ object ItemsScreenDestination : ScreenDest {
 fun ItemScreen(
     viewModel: ItemsViewModel = viewModel(factory = ViewModelCreator.Factory),
     setingsButtonAction: () -> Unit,
-    addItemButtonAction: () -> Unit = {},
+    editorNavigate: () -> Unit = {},
     bottomBar:  @Composable () -> Unit = {}
     ) {
 
@@ -64,7 +62,8 @@ fun ItemScreen(
                                 searchValueOnChange = {viewModel.updateSearchUiState(it)},
                                 setingsButtonAction = {setingsButtonAction() } )
                         },
-              floatingActionButton = {FloatingActionButton(onClick = { addItemButtonAction() }) {
+              floatingActionButton = {FloatingActionButton(onClick = {ItemMover.item = null
+                                                                      editorNavigate() }) {
                   Icon(imageVector = Icons.Default.Add,
                       contentDescription = stringResource(id = R.string.ItemAddButton))
               }}
@@ -73,9 +72,11 @@ fun ItemScreen(
         {
             ItemsList(  itemList = itemsUiState.itemList,
                 deleteItem = {coroutineScope.launch { viewModel.delete(it) }},
-                editItem = {},
+                editItem = {ItemMover.item = it
+                             editorNavigate()
+                            },
                 changeEnable = {coroutineScope.launch { viewModel.toggleEnable(it) }},
-                search = viewModel.searchUiState.search.lowercase(Locale.getDefault())
+                search = viewModel.searchUiState.search.lowercase(Locale.getDefault()),
             )
         }
     }

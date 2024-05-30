@@ -25,6 +25,9 @@ interface ItemDao {
     @Query("Select * from items where id == :id")
     fun getItem(id: Int): Flow<Item>
 
+    @Query("UPDATE items SET type = 'Other' WHERE type = :typeName")
+    suspend fun deletedType(typeName: String)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Item)
 

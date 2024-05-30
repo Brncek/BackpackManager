@@ -8,7 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -47,13 +50,17 @@ fun BackpackScreen(
 ) {
     val itemsUiState by backpackViewModel.itemsUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    var show by remember { mutableStateOf(false) }
 
     Scaffold (bottomBar = bottomBar,
         topBar = {
             TopBar( searchValue = backpackViewModel.searchUiState.search,
             searchValueOnChange = {backpackViewModel.updateSearchUiState(it)},
             setingsButtonAction = {setingsButtonAction() } )
-        }
+        },
+        floatingActionButton = {FloatingActionButton(onClick = {show = true}) {
+            Icon(imageVector =  Icons.Default.Info, contentDescription = stringResource(id = R.string.ShowStatisticts))
+        }}
     )
     { innerPadding -> Column( modifier = Modifier.padding(innerPadding))
         {
@@ -63,6 +70,15 @@ fun BackpackScreen(
                             )
         }
     }
+}
+
+@Composable
+fun infoSheet(
+    show: Boolean,
+    onShowChange: () -> Unit,
+    itemList: List<Item>
+) {
+
 }
 
 
@@ -105,7 +121,9 @@ fun BackpackItemsList(
         Row {
             Button(onClick = {changeEnable(shownItem)
                 show = false
-            }, modifier = Modifier.fillMaxWidth().padding(10.dp)) {
+            }, modifier = Modifier
+                .fillMaxWidth()
+                .padding(10.dp)) {
                 Text(text = stringResource(id = R.string.ButtonRemove))
             }
         }

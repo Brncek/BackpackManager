@@ -8,6 +8,6 @@ interface DataContainer {
 class AppDataContainer(private val context: Context) : DataContainer {
 
     override val dataRepository: DataRepository by lazy {
-        OfflineDataRepository(LocalDatabase.getDatabase(context).itemDao(), LocalDatabase.getDatabase(context).groupItemDao())
+        OfflineDataRepository(LocalDatabase.getDatabase(context).itemDao(), LocalDatabase.getDatabase(context).groupItemDao(), LocalDatabase.getDatabase(context).typeDao())
     }
 }

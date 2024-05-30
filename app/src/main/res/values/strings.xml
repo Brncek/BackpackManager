@@ -32,4 +32,10 @@
     <string name="ButtonAdd">Add</string>
     <string name="ButtonRemove">Remove</string>
     <string name="BackpackEmpty">Backpack is empty</string>
+    <string name="ShowStatisticts">Show Statistics</string>
+    <string name="SetingsTitle">Setings</string>
+    <string name="ChangeLanguageButton">Change language</string>
+    <string name="ChangeTheameButton">Change theame</string>
+    <string name="AddTypeButton">Add type</string>
+    <string name="UserTypes">User types</string>
 </resources>

@@ -5,11 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Item::class, GroupItem::class], version = 1, exportSchema = false)
+@Database(entities = [Item::class, GroupItem::class, Type::class], version = 1, exportSchema = false)
 abstract class LocalDatabase : RoomDatabase() {
 
     abstract fun itemDao() :ItemDao
     abstract fun groupItemDao() : GroupItemDao
+    abstract  fun  typeDao() : TypeDao
 
     companion object {
         @Volatile

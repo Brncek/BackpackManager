@@ -2,10 +2,11 @@ package com.example.backpackmanager.database
 
 import kotlinx.coroutines.flow.Flow
 
-class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemDao: GroupItemDao) :DataRepository {
+class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemDao: GroupItemDao, private  val typeDao: TypeDao) :DataRepository {
     override fun getAllGroupItems(): Flow<List<GroupItem>> = groupItemDao.getAllGroupItems()
 
     override fun getGroupSearched(search: String): Flow<List<GroupItem>> = groupItemDao.getGroupSearched(search)
+
     override fun getGroupItem(name: String): Flow<GroupItem> = groupItemDao.getGroupItem(name)
 
     override suspend fun insertGroup(item: GroupItem) = groupItemDao.insertGroup(item)
@@ -13,7 +14,10 @@ class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemD
     override suspend fun updateGroup(item: GroupItem) = groupItemDao.updateGroup(item)
 
     override suspend fun deleteGroup(item: GroupItem) = groupItemDao.deleteGroup(item)
+
     override suspend fun deleteGroup(name: String) = groupItemDao.deleteGroup(name)
+
+    override suspend fun deletedType(typeName: String) = itemDao.deletedType(typeName)
 
     override suspend fun deleteItemFromGroups(id: Int) = groupItemDao.deleteItemFromGroups(id)
 
@@ -33,8 +37,16 @@ class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemD
 
     override suspend fun insert(item: Item) = itemDao.insert(item)
 
+    override suspend fun insert(type: Type) = typeDao.insert(type)
+
     override suspend fun update(item: Item) = itemDao.update(item)
 
+    override suspend fun update(type: Type) = typeDao.update(type)
+
     override suspend fun delete(item: Item) = itemDao.delete(item)
+
+    override suspend fun delete(type: Type) = typeDao.delete(type)
+
+    override fun getAllTypes(): Flow<List<Type>> = typeDao.getAllTypes()
 
 }

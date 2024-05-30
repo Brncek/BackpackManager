@@ -1,5 +1,9 @@
 package com.example.backpackmanager.database
 
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 interface DataRepository {
@@ -16,6 +20,8 @@ interface DataRepository {
     suspend fun deleteGroup(item: GroupItem)
 
     suspend fun deleteGroup(name: String)
+
+    suspend fun deletedType(typeName: String)
 
     suspend fun deleteItemFromGroups(id: Int)
 
@@ -38,4 +44,12 @@ interface DataRepository {
     suspend fun update(item: Item)
 
     suspend fun delete(item: Item)
+
+    fun getAllTypes(): Flow<List<Type>>
+
+    suspend fun insert(type: Type)
+
+    suspend fun update(type: Type)
+
+    suspend fun delete(type: Type)
 }
