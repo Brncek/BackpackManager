@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
@@ -124,7 +125,7 @@ fun BackpackItemsList(
             }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)) {
-                Text(text = stringResource(id = R.string.ButtonRemove))
+                Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.ButtonAdd) , modifier =  Modifier.padding(20.dp, 5.dp))
             }
         }
     }

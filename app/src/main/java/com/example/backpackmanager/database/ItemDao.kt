@@ -16,10 +16,10 @@ interface ItemDao {
     @Query("Select * from items WHERE instr(name, :search) > 0 order by name asc")
     fun getSearched(search: String): Flow<List<Item>>
 
-    @Query("Select * from items WHERE instr(name, :search) > 0 and selected = 84 order by name asc")
+    @Query("Select * from items WHERE instr(name, :search) > 0 and addedToBackpack > 0 order by name asc")
     fun getSelectedSearched(search: String): Flow<List<Item>>
 
-    @Query("Select * from items WHERE selected = \"T\" order by name asc")
+    @Query("Select * from items WHERE addedToBackpack > 0 order by name asc")
     fun getSelected(): Flow<List<Item>>
 
     @Query("Select * from items where id == :id")

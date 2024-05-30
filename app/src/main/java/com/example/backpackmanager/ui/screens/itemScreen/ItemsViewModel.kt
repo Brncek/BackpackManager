@@ -38,14 +38,13 @@ class ItemsViewModel(private val dataRepositary: DataRepository) : ViewModel() {
         dataRepositary.delete(item)
     }
 
-    suspend fun toggleEnable(item: Item) {
-        var newItem: Item
-        if (item.selected == "T") {
-            newItem = item.copy(selected = "F")
-        } else {
-            newItem = item.copy(selected = "T")
-        }
+    suspend fun addItems(item: Item, amount: Int) {
+        val newItem: Item = item.copy(addedToBackpack = item.addedToBackpack + amount)
+        dataRepositary.update(newItem)
+    }
 
+    suspend fun removeItem(item: Item) {
+        val newItem: Item = item.copy(addedToBackpack = 0)
         dataRepositary.update(newItem)
     }
 }

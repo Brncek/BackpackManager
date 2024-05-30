@@ -38,4 +38,9 @@
     <string name="ChangeTheameButton">Change theame</string>
     <string name="AddTypeButton">Add type</string>
     <string name="UserTypes">User types</string>
+    <string name="Confirm">Confirm</string>
+    <string name="Dismiss">Dismiss</string>
+    <string name="DeleteMessage">Do you really want to delte this ?</string>
+    <string name="Amount">Amount</string>
+    <string name="peacesShort">pcs.</string>
 </resources>

@@ -37,7 +37,7 @@ class BackpackViewModel(private val dataRepositary: DataRepository) : ViewModel(
     }
 
     suspend fun remove(item: Item) {
-        var newItem =  item.copy(selected = "F")
+        var newItem =  item.copy(addedToBackpack = 0)
         dataRepositary.update(newItem)
     }
 }

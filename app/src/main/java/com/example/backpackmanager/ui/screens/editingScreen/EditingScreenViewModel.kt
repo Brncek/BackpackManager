@@ -3,12 +3,8 @@ package com.example.backpackmanager.ui.screens.editingScreen
 import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
@@ -16,9 +12,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.backpackmanager.database.DataRepository
 import com.example.backpackmanager.database.Item
 import com.example.backpackmanager.ui.navigation.ItemMover
-import com.example.backpackmanager.ui.screens.commonComponents.ItemsUiState
 import com.example.backpackmanager.ui.screens.commonComponents.TypeUiState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -48,7 +42,7 @@ class EditingScreenViewModel(private val dataRepository: DataRepository) : ViewM
 
     private fun setEdited(item : Item?) : Item? {
         if (item != null) {
-            val itemDetails = ItemDetails(item.id, item.name, item.type, item.weight.toString(), item.picturePath, item.selected)
+            val itemDetails = ItemDetails(item.id, item.name, item.type, item.weight.toString(), item.picturePath, item.addedToBackpack)
             itemUiState = ItemUiState(itemDetails, true)
         }
         return  item
@@ -110,7 +104,7 @@ data class ItemDetails(
     val type: String = "Other",
     val weight: String = "",
     val picturePath: String = "",
-    val selected: String = "F"
+    val addedToBackpack: Int = 0
 )
 
 fun ItemDetails.toItem(): Item = Item(
@@ -119,7 +113,7 @@ fun ItemDetails.toItem(): Item = Item(
     type = type,
     weight = weight.toInt(),
     picturePath = picturePath,
-    selected = selected
+    addedToBackpack = addedToBackpack
 )
 
 fun Context.copyFileToAppStorage(fileUri: Uri): Uri? {

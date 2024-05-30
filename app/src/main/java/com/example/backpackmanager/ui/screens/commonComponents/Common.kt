@@ -3,7 +3,6 @@ package com.example.backpackmanager.ui.screens.commonComponents
 
 import android.net.Uri
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -16,9 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.ArrowDropDown
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -34,13 +35,12 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -49,7 +49,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import coil.compose.rememberAsyncImagePainter
 import com.example.backpackmanager.R
 import com.example.backpackmanager.database.Item
@@ -193,11 +192,11 @@ fun ItemCard(item: Item, modifier: Modifier, showAdded: Boolean) {
                  .fillMaxWidth())
         {
 
-            Text(text = item.name, textAlign = TextAlign.Left, modifier = Modifier.padding(15.dp, 0.dp))
+            Text(text = item.name, textAlign = TextAlign.Left, modifier = Modifier.padding(15.dp, 0.dp).width(50.dp))
 
             Spacer(modifier = Modifier.weight(1f))
 
-            if (showAdded && item.selected == "T") {
+            if (showAdded && item.addedToBackpack > 0) {
                 FilterChip(
                     onClick = {},
                     label = { Text(stringResource(id = R.string.Added)) },
@@ -211,8 +210,14 @@ fun ItemCard(item: Item, modifier: Modifier, showAdded: Boolean) {
                     },
                     modifier = Modifier.padding(15.dp,0.dp,0.dp,0.dp)
                 )
+            } else if (!showAdded) {
+                FilterChip(
+                    onClick = {},
+                    label = { Text(item.addedToBackpack.toString() + " " + stringResource(id = R.string.peacesShort) ) },
+                    selected = false,
+                    modifier = Modifier.padding(15.dp,0.dp,0.dp,0.dp)
+                )
             }
-
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -231,6 +236,53 @@ fun ItemCard(item: Item, modifier: Modifier, showAdded: Boolean) {
 }
 
 
+@Composable
+fun DeleteDialog(
+    openDialog: Boolean,
+    onShowChange: () ->  Unit,
+    confirmAction: () -> Unit,
+) {
+
+
+    if (openDialog) {
+
+        AlertDialog (
+            title = {
+                Text(text = stringResource(id = R.string.DeleteMessage), textAlign = TextAlign.Center)
+            },
+
+            onDismissRequest = {
+                onShowChange()
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        confirmAction()
+                        onShowChange()
+                    }
+                ) {
+                    Text(stringResource(id = R.string.Confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        onShowChange()
+                    },
+                ) {
+                    Text(stringResource(id = R.string.Dismiss))
+                }
+            },
+            text = {
+            },
+            icon = {
+                Icon(imageVector = Icons.Default.Warning, contentDescription = "")
+            }
+        )
+    }
+}
+
+
 
 @Preview(showBackground = true)
 //@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
@@ -238,7 +290,7 @@ fun ItemCard(item: Item, modifier: Modifier, showAdded: Boolean) {
 fun Preview() {
     BackpackManagerTheme {
         //TopBar(searchValue = "", searchValueOnChange = {}, setingsButtonAction = {})
-        val item = Item(0,  "TEST", "D", 50, "","T")
+        val item = Item(0,  "TEST", "D", 50, "",0)
         Column {
             ItemCard(item = item, modifier = Modifier.padding(10.dp), showAdded = true)
         }

@@ -107,7 +107,7 @@ fun SetingsScreen( setingsViewModel : SetingsViewModel = viewModel(factory = Vie
                         openDialog = false
                     }
                 ) {
-                    Text("Confirm")
+                    Text(stringResource(id = R.string.Confirm))
                 }
             },
             dismissButton = {
@@ -116,7 +116,7 @@ fun SetingsScreen( setingsViewModel : SetingsViewModel = viewModel(factory = Vie
                         openDialog = false
                     }
                 ) {
-                    Text("Dismiss")
+                    Text(stringResource(id = R.string.Dismiss))
                 }
             },
             text = {

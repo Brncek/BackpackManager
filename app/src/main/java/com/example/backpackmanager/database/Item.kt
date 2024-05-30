@@ -12,7 +12,7 @@ data class Item(
     val type: String = "Other",
     val weight: Int = 0,
     val picturePath: String = "",
-    val selected: String = "F"
+    val addedToBackpack: Int = 0
 )
 
 //Types
