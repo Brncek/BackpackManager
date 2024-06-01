@@ -182,7 +182,6 @@ fun DetailSheet(show: Boolean,
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemCard(item: Item, modifier: Modifier, showAdded: Boolean) {
     Card( modifier = modifier, elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)) {

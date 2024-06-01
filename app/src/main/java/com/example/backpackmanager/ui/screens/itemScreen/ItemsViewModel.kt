@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.io.File
 
-class ItemsViewModel(private val dataRepositary: DataRepository) : ViewModel() {
+class ItemsViewModel(private val dataRepository: DataRepository) : ViewModel() {
     var searchUiState by mutableStateOf(SearchUiState())
         private set
 
-    val itemsUiState: StateFlow<ItemsUiState> = dataRepositary.getAllItems().map { ItemsUiState(it) }
+    val itemsUiState: StateFlow<ItemsUiState> = dataRepository.getAllItems().map { ItemsUiState(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
@@ -34,18 +34,18 @@ class ItemsViewModel(private val dataRepositary: DataRepository) : ViewModel() {
         val deletedFile = File(item.picturePath)
         deletedFile.delete()
 
-        dataRepositary.deleteItemFromGroups(item.id)
-        dataRepositary.delete(item)
+        dataRepository.deleteItemFromGroups(item.id)
+        dataRepository.delete(item)
     }
 
     suspend fun addItems(item: Item, amount: Int) {
         val newItem: Item = item.copy(addedToBackpack = item.addedToBackpack + amount)
-        dataRepositary.update(newItem)
+        dataRepository.update(newItem)
     }
 
     suspend fun removeItem(item: Item) {
         val newItem: Item = item.copy(addedToBackpack = 0)
-        dataRepositary.update(newItem)
+        dataRepository.update(newItem)
     }
 }
 

@@ -7,26 +7,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.backpackmanager.database.DataRepository
 import com.example.backpackmanager.database.GroupItem
-import com.example.backpackmanager.database.Item
-import com.example.backpackmanager.ui.screens.commonComponents.ItemsUiState
 import com.example.backpackmanager.ui.screens.commonComponents.SearchUiState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class GroupViewModel(private val dataRepositary: DataRepository) : ViewModel() {
+class GroupViewModel(private val dataRepository: DataRepository) : ViewModel() {
     var searchUiState by mutableStateOf(SearchUiState())
         private set
 
-    val ItemGroupsUiState: StateFlow<ItemGroupsUiState> = dataRepositary.getAllGroupItems().map { ItemGroupsUiState(it) }
+    val itemGroupsUiState: StateFlow<ItemGroupsUiState> = dataRepository.getAllGroupItems().map { ItemGroupsUiState(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = ItemGroupsUiState()
         )
 
-    var ItemGroupsUiStateSearch: StateFlow<ItemGroupsUiState> = dataRepositary.getGroupSearched(searchUiState.search).map { ItemGroupsUiState(it) }
+    var itemGroupsUiStateSearch: StateFlow<ItemGroupsUiState> = dataRepository.getGroupSearched(searchUiState.search).map { ItemGroupsUiState(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),

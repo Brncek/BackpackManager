@@ -20,10 +20,10 @@ interface GroupItemDao {
     fun getGroupItem(name: String): Flow<GroupItem>
 
     @Query("select groupName from groupItems")
-    fun getGrouptNames() :Flow<List<String>>
+    fun getGroupsNames() :Flow<List<String>>
 
     @Query("select groupName from groupItems where instr(groupName, :search) > 0 order by groupName asc")
-    fun getGrouptNamesSearch(search: String) :Flow<List<String>>
+    fun getGroupsNamesSearch(search: String) :Flow<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGroup(item: GroupItem)

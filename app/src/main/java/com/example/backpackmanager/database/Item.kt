@@ -15,14 +15,3 @@ data class Item(
     val addedToBackpack: Int = 0
 )
 
-//Types
-//Other
-//Sleep
-//Fire
-//Shelter
-//Food
-//Water
-//Clothes
-//Electronics
-//Tools
-

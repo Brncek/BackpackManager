@@ -7,7 +7,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,7 +30,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.sourceInformation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -49,8 +47,6 @@ import com.example.backpackmanager.R
 import com.example.backpackmanager.database.Type
 import com.example.backpackmanager.ui.ViewModelCreator
 import com.example.backpackmanager.ui.navigation.ScreenDest
-import com.example.backpackmanager.ui.screens.itemScreen.ItemsList
-import com.example.backpackmanager.ui.screens.setingsScreen.TypeCard
 import kotlinx.coroutines.launch
 
 object ItemEditScreenDestination : ScreenDest {
@@ -149,7 +145,7 @@ fun TypableItems(
         )
 
         OutlinedTextField (
-            value = itemDetails.weight.toString(),
+            value = itemDetails.weight,
             onValueChange = {onValueChange(itemDetails.copy(weight = it))},
             label = { Text(text = stringResource(id = R.string.itemWeight) ) },
             textStyle = TextStyle(),

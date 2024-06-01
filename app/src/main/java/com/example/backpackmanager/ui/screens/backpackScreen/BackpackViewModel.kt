@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.backpackmanager.database.DataRepository
 import com.example.backpackmanager.database.Item
+import com.example.backpackmanager.database.WeightType
 import com.example.backpackmanager.ui.screens.commonComponents.ItemsUiState
 import com.example.backpackmanager.ui.screens.commonComponents.SearchUiState
 import kotlinx.coroutines.flow.SharingStarted
@@ -14,22 +15,30 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class BackpackViewModel(private val dataRepositary: DataRepository) : ViewModel() {
+class BackpackViewModel(private val dataRepository: DataRepository) : ViewModel() {
     var searchUiState by mutableStateOf(SearchUiState())
         private set
 
-    val itemsUiState: StateFlow<ItemsUiState> = dataRepositary.getSelected().map { ItemsUiState(it) }
+    val itemsUiState: StateFlow<ItemsUiState> = dataRepository.getSelected().map { ItemsUiState(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = ItemsUiState()
         )
 
-    var itemsUiStateSearch: StateFlow<ItemsUiState> = dataRepositary.getSelectedSearched(searchUiState.search).map { ItemsUiState(it) }
+
+    val allWeights: StateFlow<Int> = dataRepository.getSelectedItemCountWeight().map { it }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = ItemsUiState()
+            initialValue = 0
+        )
+
+    val weightsTypes: StateFlow<ItemWeightsUiState> = dataRepository.weightsByType().map {ItemWeightsUiState(it)}
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = ItemWeightsUiState()
         )
 
     fun updateSearchUiState(search: String) {
@@ -37,9 +46,13 @@ class BackpackViewModel(private val dataRepositary: DataRepository) : ViewModel(
     }
 
     suspend fun remove(item: Item) {
-        var newItem =  item.copy(addedToBackpack = 0)
-        dataRepositary.update(newItem)
+        val newItem =  item.copy(addedToBackpack = 0)
+        dataRepository.update(newItem)
     }
 }
+
+data class ItemWeightsUiState(
+    val typeWeightList : List<WeightType> = listOf()
+)
 
 

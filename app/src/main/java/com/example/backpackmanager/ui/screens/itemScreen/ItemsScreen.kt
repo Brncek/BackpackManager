@@ -235,11 +235,11 @@ fun AddDialog(
 
 fun validateAddNumber(numberString:String) : Boolean {
     try {
-        val test = numberString.toInt()
-        return numberString.isNotBlank()
+        numberString.toInt()
     } catch (e : Exception) {
         return false
     }
+    return numberString.isNotBlank()
 }
 
 @Preview(showBackground = true)

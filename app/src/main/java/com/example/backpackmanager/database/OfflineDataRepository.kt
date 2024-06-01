@@ -21,9 +21,9 @@ class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemD
 
     override suspend fun deleteItemFromGroups(id: Int) = groupItemDao.deleteItemFromGroups(id)
 
-    override fun getGroupsNames(): Flow<List<String>> = groupItemDao.getGrouptNames()
+    override fun getGroupsNames(): Flow<List<String>> = groupItemDao.getGroupsNames()
 
-    override fun getGroupsNamesSearch(search: String): Flow<List<String>> = groupItemDao.getGrouptNamesSearch(search)
+    override fun getGroupsNamesSearch(search: String): Flow<List<String>> = groupItemDao.getGroupsNamesSearch(search)
 
     override fun getAllItems(): Flow<List<Item>> = itemDao.getAllItems()
 
@@ -34,6 +34,10 @@ class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemD
     override fun getSelected(): Flow<List<Item>> = itemDao.getSelected()
 
     override fun getItem(id: Int): Flow<Item> = itemDao.getItem(id)
+
+    override fun getSelectedItemCountWeight(): Flow<Int> = itemDao.getSelectedItemCountWeight()
+
+    override fun weightsByType(): Flow<List<WeightType>> = itemDao.weightsByType()
 
     override suspend fun insert(item: Item) = itemDao.insert(item)
 

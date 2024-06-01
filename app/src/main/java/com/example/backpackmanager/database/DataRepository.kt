@@ -1,9 +1,5 @@
 package com.example.backpackmanager.database
 
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 interface DataRepository {
@@ -38,6 +34,10 @@ interface DataRepository {
     fun getSelected(): Flow<List<Item>>
 
     fun getItem(id: Int): Flow<Item>
+
+    fun getSelectedItemCountWeight() : Flow<Int>
+
+    fun weightsByType() : Flow<List<WeightType>>
 
     suspend fun insert(item: Item)
 

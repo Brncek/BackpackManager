@@ -4,18 +4,24 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.backpackmanager.R
 import com.example.backpackmanager.database.Item
+import com.example.backpackmanager.database.WeightType
 import com.example.backpackmanager.ui.ViewModelCreator
 import com.example.backpackmanager.ui.navigation.ScreenDest
 import com.example.backpackmanager.ui.screens.commonComponents.DetailSheet
@@ -38,6 +45,7 @@ import com.example.backpackmanager.ui.screens.commonComponents.ItemCard
 import com.example.backpackmanager.ui.screens.commonComponents.TopBar
 import kotlinx.coroutines.launch
 import java.util.Locale
+import kotlin.math.roundToInt
 
 object BackpackScreenDestination : ScreenDest {
     override val route = "backpackScreen"
@@ -50,6 +58,8 @@ fun BackpackScreen(
     bottomBar:  @Composable () -> Unit
 ) {
     val itemsUiState by backpackViewModel.itemsUiState.collectAsState()
+    val allItemsWeight by backpackViewModel.allWeights.collectAsState()
+    val weightsUiState by backpackViewModel.weightsTypes.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     var show by remember { mutableStateOf(false) }
 
@@ -59,9 +69,13 @@ fun BackpackScreen(
             searchValueOnChange = {backpackViewModel.updateSearchUiState(it)},
             setingsButtonAction = {setingsButtonAction() } )
         },
-        floatingActionButton = {FloatingActionButton(onClick = {show = true}) {
-            Icon(imageVector =  Icons.Default.Info, contentDescription = stringResource(id = R.string.ShowStatisticts))
-        }}
+        floatingActionButton = {
+            if (allItemsWeight > 0) {
+                FloatingActionButton(onClick = {show = true}) {
+                    Icon(imageVector =  Icons.Default.Info, contentDescription = stringResource(id = R.string.ShowStatisticts))
+                }
+            }
+        }
     )
     { innerPadding -> Column( modifier = Modifier.padding(innerPadding))
         {
@@ -71,14 +85,66 @@ fun BackpackScreen(
                             )
         }
     }
+
+    InfoSheet(show = show, onShowChange = { show = false },
+                typeCounts = weightsUiState.typeWeightList,
+                itemCount = allItemsWeight)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun infoSheet(
+fun InfoSheet(
     show: Boolean,
     onShowChange: () -> Unit,
-    itemList: List<Item>
+    typeCounts: List<WeightType>,
+    itemCount: Int
 ) {
+    val sheetState = rememberModalBottomSheetState()
+
+    if (show) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                onShowChange()
+            },
+            sheetState = sheetState
+        ) {
+            Column(modifier = Modifier.fillMaxWidth().padding(0.dp, 0.dp, 0.dp, 45.dp)) {
+                typeCounts.forEach {
+                    TypeLine(weight = it.totalWeight, type = it.type, percentage = (it.totalWeight.toDouble() / itemCount))
+                }
+            }
+        }
+    }
+}
+
+
+@Composable
+fun TypeLine(
+    weight: Int,
+    type: String,
+    percentage : Double
+) {
+    Column(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
+        Row(modifier = Modifier.fillMaxWidth().padding(25.dp, 0.dp)) {
+            Text(text = type, modifier = Modifier.width(75.dp), textAlign = TextAlign.Left)
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Text(text = weight.toString() + "g", modifier = Modifier.width(75.dp), textAlign = TextAlign.Right)
+            if (percentage < 0.1) {
+                Text(text = "< 1%", modifier = Modifier.width(55.dp).padding(5.dp,0.dp), textAlign = TextAlign.Right)
+            } else {
+                Text(text = (percentage*100).roundToInt().toString() + "%", modifier = Modifier.width(55.dp).padding(5.dp,0.dp), textAlign = TextAlign.Right)
+            }
+        }
+
+        LinearProgressIndicator(
+            progress = { percentage.toFloat() },
+            modifier = Modifier.fillMaxWidth()
+                .padding(10.dp)
+        )
+    }
+
 
 }
 

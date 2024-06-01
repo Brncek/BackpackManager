@@ -54,7 +54,7 @@ class EditingScreenViewModel(private val dataRepository: DataRepository) : ViewM
         try {
             itemDetails.weight.toInt()
             parseTest = true
-        } catch (e: Exception) {}
+        } catch (_: Exception) {}
 
         return itemDetails.name.isNotBlank() && itemDetails.picturePath.isNotBlank() && itemDetails.picturePath != "null"
                 && itemDetails.weight.isNotBlank() && parseTest
@@ -65,14 +65,14 @@ class EditingScreenViewModel(private val dataRepository: DataRepository) : ViewM
             if (editedItem.item != null && itemUiState.itemDetails.picturePath != editedItem.item?.picturePath) {
                 val deletedFile = File(editedItem.item?.picturePath!!)
                 deletedFile.delete()
-                var newFile : Uri? = context.copyFileToAppStorage(itemUiState.itemDetails.picturePath.toUri())
+                val newFile : Uri? = context.copyFileToAppStorage(itemUiState.itemDetails.picturePath.toUri())
                 if (newFile != null) {
                     change(itemUiState.itemDetails.copy(picturePath = newFile.toString()))
                 }
             }
 
             if (editedItem.item == null){
-                var newFile : Uri? = context.copyFileToAppStorage(itemUiState.itemDetails.picturePath.toUri())
+                val newFile : Uri? = context.copyFileToAppStorage(itemUiState.itemDetails.picturePath.toUri())
                 if (newFile != null) {
                     change(itemUiState.itemDetails.copy(picturePath = newFile.toString()))
                 }
@@ -129,7 +129,7 @@ fun Context.copyFileToAppStorage(fileUri: Uri): Uri? {
         }
     }
 
-    if (fileName == null) return null;
+    if (fileName == null) return null
 
 
     val outputFile = File(filesDir, fileName!!)
