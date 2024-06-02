@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -58,9 +60,12 @@ fun EditingScreen (
     editingScreenViewModel: EditingScreenViewModel = viewModel(factory = ViewModelCreator.Factory),
     onLeave: () -> Unit = {}
 ) {
+
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     val types by editingScreenViewModel.typeUiState.collectAsState()
+
+    val scrollState = rememberScrollState()
 
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         uri: Uri? -> editingScreenViewModel.change(editingScreenViewModel.itemUiState.itemDetails.copy(picturePath = uri.toString()))
@@ -81,9 +86,9 @@ fun EditingScreen (
       }
     ) { innerPadding -> Column (modifier = Modifier
         .fillMaxSize()
-        .padding(innerPadding)) {
+        .padding(innerPadding).verticalScroll(scrollState)) {
 
-        Text(text = stringResource(R.string.EditorTytle), modifier = Modifier
+        Text(text = stringResource(R.string.EditorTitle), modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 25.dp, 0.dp, 5.dp), fontSize = 30.sp,
             textAlign = TextAlign.Center)
@@ -119,7 +124,7 @@ fun EditingScreen (
                                                 error = painterResource(id = R.drawable.noimage),
                                                 fallback = painterResource(id = R.drawable.noimage)),
             contentDescription = editingScreenViewModel.itemUiState.itemDetails.name,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().height(300.dp)
         )
 
         TypeSelectSheet(show = show, itemDetails = editingScreenViewModel.itemUiState.itemDetails

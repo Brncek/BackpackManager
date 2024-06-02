@@ -8,5 +8,6 @@ data class GroupItem(
     @PrimaryKey(true)
     val databaseId: Int = 0,
     val itemId: Int = 0,
+    val amount: Int = 0,
     val groupName: String = "",
 )

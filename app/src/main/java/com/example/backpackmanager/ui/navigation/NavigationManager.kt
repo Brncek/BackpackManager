@@ -15,6 +15,8 @@ import com.example.backpackmanager.ui.screens.backpackScreen.BackpackScreenDesti
 import com.example.backpackmanager.ui.screens.commonComponents.BottomBar
 import com.example.backpackmanager.ui.screens.editingScreen.EditingScreen
 import com.example.backpackmanager.ui.screens.editingScreen.ItemEditScreenDestination
+import com.example.backpackmanager.ui.screens.groupEditingScreen.EditingGroupScreen
+import com.example.backpackmanager.ui.screens.groupEditingScreen.EditingGroupScreenDestination
 import com.example.backpackmanager.ui.screens.groupsScreen.GroupScreen
 import com.example.backpackmanager.ui.screens.groupsScreen.GroupScreenDestination
 import com.example.backpackmanager.ui.screens.itemScreen.ItemScreen
@@ -64,7 +66,9 @@ fun NavigationManager(
                         bottomBar = { BottomBar(selectedTab = selectedItem,
                                                 firstTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)},
                                                 secondTabAction = { navController.navigate(route = BackpackScreenDestination.route)},
-                                                thirdTabAction = {} )})
+                                                thirdTabAction = {})},
+                        editGroupNavigate = { navController.navigate(route = EditingGroupScreenDestination.route) }
+                        )
         }
 
         composable(route = SetingsScreenDestination.route) {
@@ -73,6 +77,12 @@ fun NavigationManager(
 
         composable(route = ItemEditScreenDestination.route) {
             EditingScreen(onLeave = {navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)})
+        }
+
+        composable(route = EditingGroupScreenDestination.route) {
+            EditingGroupScreen(navigateToBackpack = {navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)
+                                               navController.navigate(route = BackpackScreenDestination.route) },
+                               navigateBack = {navController.popBackStack(route = GroupScreenDestination.route, inclusive = false)})
         }
     }
 }

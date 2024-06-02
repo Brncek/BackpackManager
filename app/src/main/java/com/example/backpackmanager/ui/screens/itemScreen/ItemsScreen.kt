@@ -111,7 +111,7 @@ fun ItemsList(
     addItems: (Item) -> Unit = {},
     removeItem: (Item) -> Unit = {}
 ) {
-    var show by remember { mutableStateOf(false) } //TODO: View model move
+    var show by remember { mutableStateOf(false) }
     var shownItem by remember { mutableStateOf(Item()) }
     var showDeleteDialog by remember { mutableStateOf(false) }
 
@@ -225,7 +225,9 @@ fun AddDialog(
                     textStyle = TextStyle(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
+                    maxLines = 1,
+                    singleLine = true
                 )
             }
         )

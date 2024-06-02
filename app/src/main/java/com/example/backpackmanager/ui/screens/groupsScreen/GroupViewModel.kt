@@ -6,7 +6,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.backpackmanager.database.DataRepository
-import com.example.backpackmanager.database.GroupItem
 import com.example.backpackmanager.ui.screens.commonComponents.SearchUiState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,14 +16,7 @@ class GroupViewModel(private val dataRepository: DataRepository) : ViewModel() {
     var searchUiState by mutableStateOf(SearchUiState())
         private set
 
-    val itemGroupsUiState: StateFlow<ItemGroupsUiState> = dataRepository.getAllGroupItems().map { ItemGroupsUiState(it) }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
-            initialValue = ItemGroupsUiState()
-        )
-
-    var itemGroupsUiStateSearch: StateFlow<ItemGroupsUiState> = dataRepository.getGroupSearched(searchUiState.search).map { ItemGroupsUiState(it) }
+    val itemGroupsUiState: StateFlow<ItemGroupsUiState> = dataRepository.getGroupsNames().map { ItemGroupsUiState(it) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000L),
@@ -36,4 +28,4 @@ class GroupViewModel(private val dataRepository: DataRepository) : ViewModel() {
     }
 }
 
-data class ItemGroupsUiState (val groupItemList: List<GroupItem> = listOf())
+data class ItemGroupsUiState (val groupItemList: List<String> = listOf())

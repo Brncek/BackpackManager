@@ -10,23 +10,23 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface GroupItemDao {
-    @Query("Select * from groupItems order by groupName asc")
-    fun getAllGroupItems(): Flow<List<GroupItem>>
 
-    @Query("Select * from groupItems WHERE instr(groupName, :search) > 0 order by groupName asc")
-    fun getGroupSearched(search: String): Flow<List<GroupItem>>
-
-    @Query("Select * from groupItems where groupName = :name")
-    fun getGroupItem(name: String): Flow<GroupItem>
-
-    @Query("select groupName from groupItems")
+    @Query("select distinct groupName from groupItems")
     fun getGroupsNames() :Flow<List<String>>
-
-    @Query("select groupName from groupItems where instr(groupName, :search) > 0 order by groupName asc")
-    fun getGroupsNamesSearch(search: String) :Flow<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertGroup(item: GroupItem)
+
+    @Query("select * from items where id in(select itemId from groupItems where groupName = :groupName)")
+    fun getItemsByGroup(groupName: String) : Flow<List<Item>>
+
+    @Query("Insert into groupItems(itemId, amount, groupName) " +
+                "select id, addedToBackpack, :name from items where addedToBackpack > 0 ")
+    suspend fun newGroup(name: String)
+
+    @Query("UPDATE items SET addedToBackpack = (SELECT amount FROM groupItems WHERE itemId = items.id and groupName = :groupName) " +
+            "where id in  (select itemId from groupItems where groupName = :groupName) ")
+    suspend fun addGroupToBackpack(groupName: String)
 
     @Update
     suspend fun updateGroup(item: GroupItem)

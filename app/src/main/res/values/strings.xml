@@ -10,7 +10,7 @@
     <string name="itemName">Name</string>
     <string name="itemType">Item type</string>
     <string name="itemWeight">Weight in grams</string>
-    <string name="setPiscture">Set picture</string>
+    <string name="setPicture">Set picture</string>
     <string name="typeOther">Other</string>
     <string name="typeSleep">Sleep</string>
     <string name="typeFire">Fire</string>
@@ -25,7 +25,7 @@
     <string name="changeType">Change type</string>
     <string name="SaveItem">Save item</string>
     <string name="loadImage">Load Image</string>
-    <string name="EditorTytle">Item editor</string>
+    <string name="EditorTitle">Item editor</string>
     <string name="DeleteButton">Delete</string>
     <string name="EditButton">Edit</string>
     <string name="ButtonEnable">Enable</string>
@@ -34,14 +34,17 @@
     <string name="BackpackEmpty">Backpack is empty</string>
     <string name="ShowStatisticts">Show Statistics</string>
     <string name="SetingsTitle">Setings</string>
-    <string name="ChangeLanguageButton">Change language</string>
-    <string name="ChangeTheameButton">Change theame</string>
+    <string name="ChangeThemeButton">Change theme</string>
     <string name="AddTypeButton">Add type</string>
     <string name="UserTypes">User types</string>
     <string name="Confirm">Confirm</string>
     <string name="Dismiss">Dismiss</string>
-    <string name="DeleteMessage">Do you really want to delte this ?</string>
+    <string name="DeleteMessage">Do you really want to delete this ?</string>
     <string name="Amount">Amount</string>
     <string name="peacesShort">pcs.</string>
     <string name="AppName">Backpack manager</string>
+    <string name="createGroups">Create group</string>
+    <string name="CreateGroup">Create group</string>
+    <string name="GroupName">Group name</string>
+    <string name="NoGroups">There are no groups to show</string>
 </resources>

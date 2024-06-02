@@ -17,9 +17,6 @@ interface TypeDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(type: Type)
 
-    @Update
-    suspend fun update(type: Type)
-
     @Delete
     suspend fun delete(type: Type)
 }

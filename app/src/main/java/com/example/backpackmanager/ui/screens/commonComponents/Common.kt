@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Warning
@@ -59,7 +62,8 @@ import com.example.backpackmanager.ui.theme.BackpackManagerTheme
 fun TopBar(
     searchValue: String,
     setingsButtonAction: () -> Unit,
-    searchValueOnChange: (String) -> Unit
+    searchValueOnChange: (String) -> Unit,
+    leadingButton: @Composable () -> Unit = {},
 ) {
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
@@ -67,12 +71,15 @@ fun TopBar(
             ),
         title = {
                 OutlinedTextField(
-                    value = searchValue, onValueChange = {searchValueOnChange(it)}, //TODO:text align
+                    value = searchValue, onValueChange = {searchValueOnChange(it)},
                     label = { Text(text = stringResource(id = R.string.search) )},
                     trailingIcon = {
                         Icon(imageVector = Icons.Rounded.Search, contentDescription = "Search")
                     },
                     textStyle = TextStyle(),
+                    maxLines = 1,
+                    singleLine = true,
+                    modifier = Modifier.widthIn(0.dp,270.dp)
                 )
         },
 
@@ -82,7 +89,10 @@ fun TopBar(
                 Icon(imageVector = Icons.Outlined.Settings, contentDescription = "")
             }
         },
-        modifier = Modifier.height(70.dp)
+        modifier = Modifier.height(70.dp),
+        navigationIcon = {
+            leadingButton()
+        }
     )
 }
 
@@ -117,7 +127,6 @@ fun BottomBar(
                             }
                         }
                               },
-                    //TODO::colors
                 )
             }
         }
@@ -133,6 +142,7 @@ fun DetailSheet(show: Boolean,
 ) {
 
     val sheetState = rememberModalBottomSheetState()
+    val scrollState = rememberScrollState()
 
     if (show) {
         ModalBottomSheet(
@@ -141,7 +151,8 @@ fun DetailSheet(show: Boolean,
             },
             sheetState = sheetState
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
+                                                                        .verticalScroll(scrollState)) {
                 Text(text = item.name, color = MaterialTheme.colorScheme.inversePrimary, fontSize = 25.sp)
                 Image(painter = rememberAsyncImagePainter(  model = item.picturePath.toUri(),
                                                             error = painterResource(id = R.drawable.noimage),

@@ -49,6 +49,10 @@ class BackpackViewModel(private val dataRepository: DataRepository) : ViewModel(
         val newItem =  item.copy(addedToBackpack = 0)
         dataRepository.update(newItem)
     }
+
+    suspend fun createNewGroup(name: String) {
+        dataRepository.newGroup(name)
+    }
 }
 
 data class ItemWeightsUiState(

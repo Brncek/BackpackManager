@@ -62,13 +62,7 @@ fun SetingsScreen( setingsViewModel : SetingsViewModel = viewModel(factory = Vie
         Button(onClick = { /*TODO*/ }, modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp)) {
-            Text(text = stringResource(id = R.string.ChangeLanguageButton))
-        }
-
-        Button(onClick = { /*TODO*/ }, modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)) {
-            Text(text = stringResource(id = R.string.ChangeTheameButton))
+            Text(text = stringResource(id = R.string.ChangeThemeButton))
         }
 
         Button(onClick = {dialogString = ""
@@ -127,7 +121,9 @@ fun SetingsScreen( setingsViewModel : SetingsViewModel = viewModel(factory = Vie
                     textStyle = TextStyle(),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp)
+                        .padding(10.dp),
+                    maxLines = 1,
+                    singleLine = true
                 )
             }
         )

@@ -3,13 +3,6 @@ package com.example.backpackmanager.database
 import kotlinx.coroutines.flow.Flow
 
 class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemDao: GroupItemDao, private  val typeDao: TypeDao) :DataRepository {
-    override fun getAllGroupItems(): Flow<List<GroupItem>> = groupItemDao.getAllGroupItems()
-
-    override fun getGroupSearched(search: String): Flow<List<GroupItem>> = groupItemDao.getGroupSearched(search)
-
-    override fun getGroupItem(name: String): Flow<GroupItem> = groupItemDao.getGroupItem(name)
-
-    override suspend fun insertGroup(item: GroupItem) = groupItemDao.insertGroup(item)
 
     override suspend fun updateGroup(item: GroupItem) = groupItemDao.updateGroup(item)
 
@@ -23,17 +16,9 @@ class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemD
 
     override fun getGroupsNames(): Flow<List<String>> = groupItemDao.getGroupsNames()
 
-    override fun getGroupsNamesSearch(search: String): Flow<List<String>> = groupItemDao.getGroupsNamesSearch(search)
-
     override fun getAllItems(): Flow<List<Item>> = itemDao.getAllItems()
 
-    override fun getSearched(search: String): Flow<List<Item>> = itemDao.getSearched(search)
-
-    override fun getSelectedSearched(search: String): Flow<List<Item>> = itemDao.getSelectedSearched(search)
-
     override fun getSelected(): Flow<List<Item>> = itemDao.getSelected()
-
-    override fun getItem(id: Int): Flow<Item> = itemDao.getItem(id)
 
     override fun getSelectedItemCountWeight(): Flow<Int> = itemDao.getSelectedItemCountWeight()
 
@@ -45,12 +30,18 @@ class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemD
 
     override suspend fun update(item: Item) = itemDao.update(item)
 
-    override suspend fun update(type: Type) = typeDao.update(type)
-
     override suspend fun delete(item: Item) = itemDao.delete(item)
 
     override suspend fun delete(type: Type) = typeDao.delete(type)
 
     override fun getAllTypes(): Flow<List<Type>> = typeDao.getAllTypes()
+
+    override fun getItemsByGroup(groupName: String): Flow<List<Item>> = groupItemDao.getItemsByGroup(groupName)
+
+    override suspend fun newGroup(name: String)  = groupItemDao.newGroup(name)
+
+    override suspend fun removeAllItems() = itemDao.removeAllItems()
+
+    override suspend fun addGroupToBackpack(groupName: String) = groupItemDao.addGroupToBackpack(groupName)
 
 }

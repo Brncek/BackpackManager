@@ -7,24 +7,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import java.util.Dictionary
 
 @Dao
 interface ItemDao {
     @Query("Select * from items order by name asc")
     fun getAllItems(): Flow<List<Item>>
 
-    @Query("Select * from items WHERE instr(name, :search) > 0 order by name asc")
-    fun getSearched(search: String): Flow<List<Item>>
-
-    @Query("Select * from items WHERE instr(name, :search) > 0 and addedToBackpack > 0 order by name asc")
-    fun getSelectedSearched(search: String): Flow<List<Item>>
-
     @Query("Select * from items WHERE addedToBackpack > 0 order by name asc")
     fun getSelected(): Flow<List<Item>>
 
-    @Query("Select * from items where id == :id")
-    fun getItem(id: Int): Flow<Item>
 
     @Query("UPDATE items SET type = 'Other' WHERE type = :typeName")
     suspend fun deletedType(typeName: String)
@@ -34,6 +25,9 @@ interface ItemDao {
 
     @Query("select type , sum(addedToBackpack * weight) as totalWeight from items where addedToBackpack > 0 group by type")
     fun weightsByType() : Flow<List<WeightType>>
+
+    @Query("UPDATE items SET addedToBackpack = 0")
+    suspend fun removeAllItems()
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(item: Item)

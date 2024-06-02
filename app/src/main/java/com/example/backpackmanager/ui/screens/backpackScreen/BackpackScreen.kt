@@ -5,22 +5,30 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -31,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,12 +71,22 @@ fun BackpackScreen(
     val weightsUiState by backpackViewModel.weightsTypes.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     var show by remember { mutableStateOf(false) }
+    var showGroupAdd by remember { mutableStateOf(false) }
 
     Scaffold (bottomBar = bottomBar,
         topBar = {
             TopBar( searchValue = backpackViewModel.searchUiState.search,
-            searchValueOnChange = {backpackViewModel.updateSearchUiState(it)},
-            setingsButtonAction = {setingsButtonAction() } )
+            searchValueOnChange = { backpackViewModel.updateSearchUiState(it)},
+            setingsButtonAction = { setingsButtonAction() },
+            leadingButton = { if (allItemsWeight > 0) {
+                                    IconButton(onClick = { showGroupAdd = true }, modifier = Modifier.fillMaxHeight()) {
+                                        Icon(imageVector = Icons.Default.Favorite, contentDescription = stringResource(
+                                            id = R.string.createGroups
+                                        ))
+                                    }
+                                }
+                            }    
+            )
         },
         floatingActionButton = {
             if (allItemsWeight > 0) {
@@ -89,6 +108,10 @@ fun BackpackScreen(
     InfoSheet(show = show, onShowChange = { show = false },
                 typeCounts = weightsUiState.typeWeightList,
                 itemCount = allItemsWeight)
+
+    AddGroupDialog(openDialog = showGroupAdd, onShowChange = { showGroupAdd = false }) {
+        coroutineScope.launch { backpackViewModel.createNewGroup(it) }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,6 +123,7 @@ fun InfoSheet(
     itemCount: Int
 ) {
     val sheetState = rememberModalBottomSheetState()
+    val scrollState = rememberScrollState()
 
     if (show) {
         ModalBottomSheet(
@@ -108,7 +132,10 @@ fun InfoSheet(
             },
             sheetState = sheetState
         ) {
-            Column(modifier = Modifier.fillMaxWidth().padding(0.dp, 0.dp, 0.dp, 45.dp)) {
+            Column(modifier = Modifier
+                .fillMaxWidth()
+                .padding(0.dp, 0.dp, 0.dp, 45.dp)
+                .verticalScroll(scrollState)) {
                 typeCounts.forEach {
                     TypeLine(weight = it.totalWeight, type = it.type, percentage = (it.totalWeight.toDouble() / itemCount))
                 }
@@ -124,23 +151,32 @@ fun TypeLine(
     type: String,
     percentage : Double
 ) {
-    Column(modifier = Modifier.fillMaxWidth().padding(10.dp)) {
-        Row(modifier = Modifier.fillMaxWidth().padding(25.dp, 0.dp)) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .padding(10.dp)) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(25.dp, 0.dp)) {
             Text(text = type, modifier = Modifier.width(75.dp), textAlign = TextAlign.Left)
 
             Spacer(modifier = Modifier.weight(1f))
 
             Text(text = weight.toString() + "g", modifier = Modifier.width(75.dp), textAlign = TextAlign.Right)
             if (percentage < 0.1) {
-                Text(text = "< 1%", modifier = Modifier.width(55.dp).padding(5.dp,0.dp), textAlign = TextAlign.Right)
+                Text(text = "< 1%", modifier = Modifier
+                    .width(55.dp)
+                    .padding(5.dp, 0.dp), textAlign = TextAlign.Right)
             } else {
-                Text(text = (percentage*100).roundToInt().toString() + "%", modifier = Modifier.width(55.dp).padding(5.dp,0.dp), textAlign = TextAlign.Right)
+                Text(text = (percentage*100).roundToInt().toString() + "%", modifier = Modifier
+                    .width(55.dp)
+                    .padding(5.dp, 0.dp), textAlign = TextAlign.Right)
             }
         }
 
         LinearProgressIndicator(
             progress = { percentage.toFloat() },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(10.dp)
         )
     }
@@ -194,5 +230,60 @@ fun BackpackItemsList(
                 Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.ButtonAdd) , modifier =  Modifier.padding(20.dp, 5.dp))
             }
         }
+    }
+}
+
+@Composable
+fun AddGroupDialog(
+    openDialog: Boolean,
+    onShowChange: () ->  Unit,
+    confirmAction: (String) -> Unit,
+) {
+    var dialogString by remember { mutableStateOf("") }
+
+    if (openDialog) {
+
+        AlertDialog (
+            title = {
+                Text(text = stringResource(id = R.string.CreateGroup))
+            },
+
+            onDismissRequest = {
+                onShowChange()
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = dialogString.isNotBlank(),
+                    onClick = {
+                        onShowChange()
+                        confirmAction(dialogString)
+                    }
+                ) {
+                    Text(stringResource(id = R.string.Confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        onShowChange()
+                    }
+                ) {
+                    Text(stringResource(id = R.string.Dismiss))
+                }
+            },
+            text = {
+                OutlinedTextField(
+                    value = dialogString,
+                    onValueChange = {dialogString = it},
+                    label = { Text(text = stringResource(id = R.string.GroupName) ) },
+                    textStyle = TextStyle(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    maxLines = 1,
+                    singleLine = true
+                )
+            }
+        )
     }
 }

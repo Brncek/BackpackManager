@@ -3,13 +3,6 @@ package com.example.backpackmanager.database
 import kotlinx.coroutines.flow.Flow
 
 interface DataRepository {
-    fun getAllGroupItems(): Flow<List<GroupItem>>
-
-    fun getGroupSearched(search: String): Flow<List<GroupItem>>
-
-    fun getGroupItem(name: String): Flow<GroupItem>
-
-    suspend fun insertGroup(item: GroupItem)
 
     suspend fun updateGroup(item: GroupItem)
 
@@ -23,17 +16,9 @@ interface DataRepository {
 
     fun getGroupsNames() :Flow<List<String>>
 
-    fun getGroupsNamesSearch(search: String) : Flow<List<String>>
-
     fun getAllItems(): Flow<List<Item>>
 
-    fun getSearched(search: String): Flow<List<Item>>
-
-    fun getSelectedSearched(search: String): Flow<List<Item>>
-
     fun getSelected(): Flow<List<Item>>
-
-    fun getItem(id: Int): Flow<Item>
 
     fun getSelectedItemCountWeight() : Flow<Int>
 
@@ -49,7 +34,13 @@ interface DataRepository {
 
     suspend fun insert(type: Type)
 
-    suspend fun update(type: Type)
-
     suspend fun delete(type: Type)
+
+    fun getItemsByGroup(groupName: String) : Flow<List<Item>>
+
+    suspend fun newGroup(name: String)
+
+    suspend fun removeAllItems()
+
+    suspend fun addGroupToBackpack(groupName: String)
 }
