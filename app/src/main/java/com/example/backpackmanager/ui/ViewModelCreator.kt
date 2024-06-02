@@ -10,7 +10,7 @@ import com.example.backpackmanager.ui.screens.editingScreen.EditingScreenViewMod
 import com.example.backpackmanager.ui.screens.groupEditingScreen.EditingGroupViewModel
 import com.example.backpackmanager.ui.screens.groupsScreen.GroupViewModel
 import com.example.backpackmanager.ui.screens.itemScreen.ItemsViewModel
-import com.example.backpackmanager.ui.screens.setingsScreen.SetingsViewModel
+import com.example.backpackmanager.ui.screens.setingsScreen.TypesViewModel
 
 object ViewModelCreator {
     val Factory = viewModelFactory {
@@ -42,7 +42,7 @@ object ViewModelCreator {
         }
 
         initializer {
-            SetingsViewModel(
+            TypesViewModel(
                 backpackManagerApp().dataContainer.dataRepository
             )
         }

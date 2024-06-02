@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
-import com.example.backpackmanager.ui.theme.BackpackManagerTheme
+import com.example.backpackmanager.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -36,7 +36,7 @@ class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            BackpackManagerTheme {
+            AppTheme {
                 SplashScreen()
             }
         }
@@ -73,8 +73,11 @@ fun SplashScreen() {
     
     Column(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxSize()) {
         Text(text = stringResource(id = R.string.AppName), fontSize = 45.sp, textAlign = TextAlign.Center
-            , modifier = Modifier.fillMaxWidth().padding(5.dp, 70.dp)
-                            .background(Color.White).border(BorderStroke(2.dp, Color(0xFFA52A2A)))
+            , modifier = Modifier
+                .fillMaxWidth()
+                .padding(5.dp, 70.dp)
+                .background(Color.White)
+                .border(BorderStroke(2.dp, Color(0xFFA52A2A)))
             , fontWeight = FontWeight.ExtraBold , color = Color(0xFFA52A2A))
     }
 }

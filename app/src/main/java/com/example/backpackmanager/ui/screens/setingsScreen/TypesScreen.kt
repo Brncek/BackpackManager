@@ -44,25 +44,20 @@ object SetingsScreenDestination : ScreenDest {
 }
 
 @Composable
-fun SetingsScreen( setingsViewModel : SetingsViewModel = viewModel(factory = ViewModelCreator.Factory)) {
+fun SetingsScreen(typesViewModel : TypesViewModel = viewModel(factory = ViewModelCreator.Factory)) {
 
     val coroutineScope = rememberCoroutineScope()
     var openAddDialog by remember { mutableStateOf(false) }
     var openDeleteDialog by remember { mutableStateOf(false) }
     var deletedType by remember { mutableStateOf(Type()) }
-    val typesUiState by setingsViewModel.typeUiState.collectAsState()
+    val typesUiState by typesViewModel.typeUiState.collectAsState()
 
     Column {
-        Text(text = stringResource(R.string.SetingsTitle), modifier = Modifier
+        Text(text = stringResource(R.string.Types), modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 25.dp, 0.dp, 5.dp), fontSize = 30.sp,
             textAlign = TextAlign.Center)
 
-        Button(onClick = { /*TODO*/ }, modifier = Modifier
-            .fillMaxWidth()
-            .padding(15.dp)) {
-            Text(text = stringResource(id = R.string.ChangeThemeButton))
-        }
 
         Button(onClick = { openAddDialog = true
                          }, modifier = Modifier
@@ -85,11 +80,11 @@ fun SetingsScreen( setingsViewModel : SetingsViewModel = viewModel(factory = Vie
         textBoxTitle =stringResource(id = R.string.itemName) , openDialog = openAddDialog,
         onShowChange = { openAddDialog = false }) {
 
-        coroutineScope.launch{setingsViewModel.addType(it)}
+        coroutineScope.launch{typesViewModel.addType(it)}
     }
 
     DeleteDialog(openDialog = openDeleteDialog, onShowChange = { openDeleteDialog = false }) {
-        coroutineScope.launch { setingsViewModel.removeType(deletedType) }
+        coroutineScope.launch { typesViewModel.removeType(deletedType) }
     }
 }
 

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-class SetingsViewModel(private val dataRepository: DataRepository) : ViewModel() {
+class TypesViewModel(private val dataRepository: DataRepository) : ViewModel() {
 
     val typeUiState: StateFlow<TypeUiState> = dataRepository.getAllTypes().map { TypeUiState(it) }
         .stateIn(

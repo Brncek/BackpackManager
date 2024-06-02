@@ -86,7 +86,6 @@ class EditingScreenViewModel(private val dataRepository: DataRepository) : ViewM
         }
     }
 
-
 }
 
 data class ItemUiState(

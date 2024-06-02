@@ -51,6 +51,7 @@ import com.example.backpackmanager.ui.ViewModelCreator
 import com.example.backpackmanager.ui.navigation.ScreenDest
 import kotlinx.coroutines.launch
 
+
 object ItemEditScreenDestination : ScreenDest {
     override val route = "itemEditScreen"
 }
@@ -67,7 +68,7 @@ fun EditingScreen (
 
     val scrollState = rememberScrollState()
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+    val galleryLauncher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
         uri: Uri? -> editingScreenViewModel.change(editingScreenViewModel.itemUiState.itemDetails.copy(picturePath = uri.toString()))
     }
 
@@ -86,7 +87,8 @@ fun EditingScreen (
       }
     ) { innerPadding -> Column (modifier = Modifier
         .fillMaxSize()
-        .padding(innerPadding).verticalScroll(scrollState)) {
+        .padding(innerPadding)
+        .verticalScroll(scrollState)) {
 
         Text(text = stringResource(R.string.EditorTitle), modifier = Modifier
             .fillMaxWidth()
@@ -111,7 +113,7 @@ fun EditingScreen (
             Text(text = stringResource(id = R.string.changeType))
         }
 
-        Button(onClick = { launcher.launch("image/*") }, modifier = Modifier
+        Button(onClick = { galleryLauncher.launch("image/*") }, modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)) {
             Text(text = stringResource(id = R.string.loadImage))
@@ -124,7 +126,9 @@ fun EditingScreen (
                                                 error = painterResource(id = R.drawable.noimage),
                                                 fallback = painterResource(id = R.drawable.noimage)),
             contentDescription = editingScreenViewModel.itemUiState.itemDetails.name,
-            modifier = Modifier.fillMaxWidth().height(300.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(300.dp)
         )
 
         TypeSelectSheet(show = show, itemDetails = editingScreenViewModel.itemUiState.itemDetails
