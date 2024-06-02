@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Clear
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +44,7 @@ import com.example.backpackmanager.database.Item
 import com.example.backpackmanager.ui.ViewModelCreator
 import com.example.backpackmanager.ui.navigation.ItemMover
 import com.example.backpackmanager.ui.navigation.ScreenDest
+import com.example.backpackmanager.ui.screens.commonComponents.AddDialog
 import com.example.backpackmanager.ui.screens.commonComponents.DeleteDialog
 import com.example.backpackmanager.ui.screens.commonComponents.DetailSheet
 import com.example.backpackmanager.ui.screens.commonComponents.ItemCard
@@ -98,7 +101,7 @@ fun ItemScreen(
 
     AddDialog(openDialog = showAddDialog, onShowChange = { showAddDialog = false }, confirmAction = {
         coroutineScope.launch { viewModel.addItems(addedItem, it) }
-    })
+    }, titleText = stringResource(id = R.string.ButtonAdd))
 }
 
 
@@ -177,61 +180,6 @@ fun ItemsList(
     }
 
     DeleteDialog(openDialog = showDeleteDialog, onShowChange = { showDeleteDialog = false }, confirmAction = {deleteItem(shownItem)})
-}
-
-@Composable
-fun AddDialog(
-    openDialog: Boolean,
-    onShowChange: () ->  Unit,
-    confirmAction: (Int) -> Unit,
-) {
-    var dialogString by remember { mutableStateOf("") }
-
-    if (openDialog) {
-
-        AlertDialog (
-            title = {
-                Text(text = stringResource(id = R.string.ButtonAdd))
-            },
-
-            onDismissRequest = {
-                onShowChange()
-            },
-            confirmButton = {
-                TextButton(
-                    enabled = validateAddNumber(dialogString),
-                    onClick = {
-                        onShowChange()
-                        confirmAction(dialogString.toInt())
-                    }
-                ) {
-                    Text(stringResource(id = R.string.Confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        onShowChange()
-                    }
-                ) {
-                    Text(stringResource(id = R.string.Dismiss))
-                }
-            },
-            text = {
-                OutlinedTextField(
-                    value = dialogString,
-                    onValueChange = {dialogString = it},
-                    label = { Text(text = stringResource(id = R.string.Amount) ) },
-                    textStyle = TextStyle(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    maxLines = 1,
-                    singleLine = true
-                )
-            }
-        )
-    }
 }
 
 

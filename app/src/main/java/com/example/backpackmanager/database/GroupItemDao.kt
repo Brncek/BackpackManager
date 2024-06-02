@@ -20,6 +20,10 @@ interface GroupItemDao {
     @Query("select * from items where id in(select itemId from groupItems where groupName = :groupName)")
     fun getItemsByGroup(groupName: String) : Flow<List<Item>>
 
+    @Query("select id, amount from items it join groupItems gi on(it.id = gi.itemId) " +
+            "where id in(select itemId from groupItems where groupName = :groupName)")
+    fun getGroupItemsAmounts(groupName: String) : Flow<List<ItemGroupAmount>>
+
     @Query("Insert into groupItems(itemId, amount, groupName) " +
                 "select id, addedToBackpack, :name from items where addedToBackpack > 0 ")
     suspend fun newGroup(name: String)
@@ -27,6 +31,15 @@ interface GroupItemDao {
     @Query("UPDATE items SET addedToBackpack = (SELECT amount FROM groupItems WHERE itemId = items.id and groupName = :groupName) " +
             "where id in  (select itemId from groupItems where groupName = :groupName) ")
     suspend fun addGroupToBackpack(groupName: String)
+
+    @Query("Update groupItems set groupName = :newName where groupName = :oldName")
+    suspend fun changeGroupName(oldName: String, newName:String)
+
+    @Query("Update groupItems set amount = :amount where groupName = :groupName and itemId = :itemId")
+    suspend fun changeGroupItemAmount(groupName: String, itemId: Int, amount:Int)
+
+    @Query("delete from groupItems where groupName = :groupName and itemId = :itemId")
+    suspend fun deleteItemFromGroup(groupName: String, itemId: Int)
 
     @Update
     suspend fun updateGroup(item: GroupItem)

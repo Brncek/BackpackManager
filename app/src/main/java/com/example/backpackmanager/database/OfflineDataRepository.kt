@@ -44,4 +44,12 @@ class OfflineDataRepository(private val itemDao: ItemDao, private val groupItemD
 
     override suspend fun addGroupToBackpack(groupName: String) = groupItemDao.addGroupToBackpack(groupName)
 
+    override fun getGroupItemsAmounts(groupName: String): Flow<List<ItemGroupAmount>> = groupItemDao.getGroupItemsAmounts(groupName)
+
+    override suspend fun changeGroupName(oldName: String, newName: String) = groupItemDao.changeGroupName(oldName, newName)
+
+    override suspend fun changeGroupItemAmount(groupName: String, itemId: Int, amount: Int)  = groupItemDao.changeGroupItemAmount(groupName, itemId, amount)
+
+    override suspend fun deleteItemFromGroup(groupName: String, itemId: Int) = groupItemDao.deleteItemFromGroup(groupName, itemId)
+
 }

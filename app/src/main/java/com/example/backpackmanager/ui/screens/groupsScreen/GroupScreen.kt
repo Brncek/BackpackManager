@@ -46,20 +46,19 @@ fun GroupScreen(
     ) {
     val itemGroupsUiState by groupViewModel.itemGroupsUiState.collectAsState()
 
-        Scaffold (bottomBar = bottomBar,
+    Scaffold (bottomBar = bottomBar,
             topBar = {
                 TopBar( searchValue = groupViewModel.searchUiState.search,
                 searchValueOnChange = {groupViewModel.updateSearchUiState(it)},
                 setingsButtonAction = {setingsButtonAction() } )
             }
-        )
-        { innerPadding -> Column( modifier = Modifier.padding(innerPadding))
+        ) { innerPadding -> Column( modifier = Modifier.padding(innerPadding))
             {
                 GroupsList(listOfNames = itemGroupsUiState.groupItemList,
                     search = groupViewModel.searchUiState.search,
                     editGroupNavigate = { editGroupNavigate() })
             }
-        }
+    }
 }
 
 @Composable

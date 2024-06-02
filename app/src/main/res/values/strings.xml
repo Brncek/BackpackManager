@@ -47,4 +47,13 @@
     <string name="CreateGroup">Create group</string>
     <string name="GroupName">Group name</string>
     <string name="NoGroups">There are no groups to show</string>
+    <string name="AddToBackpack">Add to backpack</string>
+    <string name="ReplaceBackpack">Replace backpack</string>
+    <string name="GroupDeleteButton">Delete group button</string>
+    <string name="GroupItems">Group items</string>
+    <string name="EditNameGroupButton">Edit group name</string>
+    <string name="ChangeAmount">Chnage amount</string>
+    <string name="GroupAmountEditButton">Edit item amount</string>
+    <string name="DeleteItemFromGroupButtn">Delete item from group</string>
+    <string name="ChangeGroupName">Change group name</string>
 </resources>

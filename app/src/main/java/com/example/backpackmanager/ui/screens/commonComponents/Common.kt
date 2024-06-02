@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -42,11 +43,16 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -55,6 +61,7 @@ import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import com.example.backpackmanager.R
 import com.example.backpackmanager.database.Item
+import com.example.backpackmanager.ui.screens.itemScreen.validateAddNumber
 import com.example.backpackmanager.ui.theme.BackpackManagerTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -140,11 +147,10 @@ fun DetailSheet(show: Boolean,
                 onChangeShow: (Boolean) -> Unit,
                 content: @Composable ColumnScope.() -> Unit,
 ) {
-
-    val sheetState = rememberModalBottomSheetState()
-    val scrollState = rememberScrollState()
-
     if (show) {
+        val sheetState = rememberModalBottomSheetState()
+        val scrollState = rememberScrollState()
+
         ModalBottomSheet(
             onDismissRequest = {
                 onChangeShow(false)
@@ -202,7 +208,7 @@ fun ItemCard(item: Item, modifier: Modifier, showAdded: Boolean) {
                  .fillMaxWidth())
         {
 
-            Text(text = item.name, textAlign = TextAlign.Left, modifier = Modifier.padding(15.dp, 0.dp).width(50.dp))
+            Text(text = item.name, textAlign = TextAlign.Left, modifier = Modifier.padding(15.dp, 0.dp,0.dp, 0.dp).width(70.dp))
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -252,8 +258,6 @@ fun DeleteDialog(
     onShowChange: () ->  Unit,
     confirmAction: () -> Unit,
 ) {
-
-
     if (openDialog) {
 
         AlertDialog (
@@ -292,6 +296,62 @@ fun DeleteDialog(
     }
 }
 
+@Composable
+fun AddDialog(
+    titleText: String,
+    openDialog: Boolean,
+    onShowChange: () ->  Unit,
+    confirmAction: (Int) -> Unit,
+) {
+    if (openDialog) {
+        var dialogString by remember { mutableStateOf("") }
+
+        AlertDialog (
+            title = {
+                Text(text = titleText)
+            },
+
+            onDismissRequest = {
+                onShowChange()
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = validateAddNumber(dialogString),
+                    onClick = {
+                        onShowChange()
+                        confirmAction(dialogString.toInt())
+                    }
+                ) {
+                    Text(stringResource(id = R.string.Confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        onShowChange()
+                    }
+                ) {
+                    Text(stringResource(id = R.string.Dismiss))
+                }
+            },
+            text = {
+                OutlinedTextField(
+                    value = dialogString,
+                    onValueChange = {dialogString = it},
+                    label = { Text(text = stringResource(id = R.string.Amount) ) },
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    textStyle = TextStyle(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    maxLines = 1,
+                    singleLine = true
+                )
+            }
+        )
+    }
+}
+
 
 
 @Preview(showBackground = true)
@@ -304,7 +364,62 @@ fun Preview() {
         Column {
             ItemCard(item = item, modifier = Modifier.padding(10.dp), showAdded = true)
         }
-
     }
 }
 
+
+@Composable
+fun GetTextDialog(
+    title: String,
+    textBoxTitle: String,
+    openDialog: Boolean,
+    onShowChange: () ->  Unit,
+    confirmAction: (String) -> Unit,
+) {
+    if (openDialog) {
+        var dialogString by remember { mutableStateOf("") }
+
+        AlertDialog (
+            title = {
+                Text(text = title)
+            },
+
+            onDismissRequest = {
+                onShowChange()
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = dialogString.isNotBlank(),
+                    onClick = {
+                        onShowChange()
+                        confirmAction(dialogString)
+                    }
+                ) {
+                    Text(stringResource(id = R.string.Confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        onShowChange()
+                    }
+                ) {
+                    Text(stringResource(id = R.string.Dismiss))
+                }
+            },
+            text = {
+                OutlinedTextField(
+                    value = dialogString,
+                    onValueChange = {dialogString = it},
+                    label = { Text(text = textBoxTitle ) },
+                    textStyle = TextStyle(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    maxLines = 1,
+                    singleLine = true
+                )
+            }
+        )
+    }
+}

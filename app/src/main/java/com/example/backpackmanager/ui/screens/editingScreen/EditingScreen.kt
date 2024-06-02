@@ -144,6 +144,8 @@ fun TypableItems(
             onValueChange = {onValueChange(itemDetails.copy(name = it))},
             label = { Text(text = stringResource(id = R.string.itemName) ) },
             textStyle = TextStyle(),
+            maxLines = 1,
+            singleLine = true ,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
@@ -155,6 +157,8 @@ fun TypableItems(
             label = { Text(text = stringResource(id = R.string.itemWeight) ) },
             textStyle = TextStyle(),
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            maxLines = 1,
+            singleLine = true ,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
@@ -171,9 +175,9 @@ fun TypeSelectSheet(
     onValueChange: (ItemDetails) -> Unit,
     types: List<Type>
 ) {
-    val sheetState = rememberModalBottomSheetState()
-
     if (show) {
+        val sheetState = rememberModalBottomSheetState()
+
         ModalBottomSheet(
             onDismissRequest = {
                 onChangeShow(false)

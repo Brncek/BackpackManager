@@ -43,4 +43,12 @@ interface DataRepository {
     suspend fun removeAllItems()
 
     suspend fun addGroupToBackpack(groupName: String)
+
+    fun getGroupItemsAmounts(groupName: String) : Flow<List<ItemGroupAmount>>
+
+    suspend fun changeGroupName(oldName: String, newName:String)
+
+    suspend fun changeGroupItemAmount(groupName: String, itemId: Int, amount:Int)
+
+    suspend fun deleteItemFromGroup(groupName: String, itemId: Int)
 }
