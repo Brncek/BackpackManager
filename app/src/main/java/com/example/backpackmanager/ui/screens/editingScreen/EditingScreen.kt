@@ -90,7 +90,7 @@ fun EditingScreen (
         .padding(innerPadding)
         .verticalScroll(scrollState)) {
 
-        Text(text = stringResource(R.string.EditorTitle), modifier = Modifier
+        Text(text = stringResource(R.string.editorTitle), modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 25.dp, 0.dp, 5.dp), fontSize = 30.sp,
             textAlign = TextAlign.Center)
@@ -101,7 +101,7 @@ fun EditingScreen (
             .padding(5.dp))
 
         Row(modifier = Modifier.fillMaxWidth()) {
-            Text(text = stringResource(id = R.string.TypeText), modifier = Modifier
+            Text(text = stringResource(id = R.string.typeText), modifier = Modifier
                 .padding(15.dp, 5.dp, 0.dp, 5.dp), fontSize = 30.sp)
             Text(text = editingScreenViewModel.itemUiState.itemDetails.type, modifier = Modifier
                 .padding(10.dp, 5.dp), fontSize = 30.sp)
@@ -209,7 +209,7 @@ fun TypeButtons(
             onClick = {onValueChange(itemDetails.copy(type = "Other"))})
 
 
-        Text(text = stringResource(id = R.string.UserTypes), modifier = Modifier
+        Text(text = stringResource(id = R.string.userTypes), modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp, 5.dp), fontSize = 20.sp)
 

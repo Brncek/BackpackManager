@@ -72,7 +72,7 @@ fun ItemScreen(
               floatingActionButton = {FloatingActionButton(onClick = {ItemMover.item = null
                                                                       editorNavigate() }) {
                   Icon(imageVector = Icons.Default.Add,
-                      contentDescription = stringResource(id = R.string.ItemAddButton))
+                      contentDescription = stringResource(id = R.string.itemAddButton))
               }}
              )
     { innerPadding -> Column( modifier = Modifier.padding(innerPadding))
@@ -93,7 +93,7 @@ fun ItemScreen(
 
     AddDialog(openDialog = showAddDialog, onShowChange = { showAddDialog = false }, confirmAction = {
         coroutineScope.launch { viewModel.addItems(addedItem, it) }
-    }, titleText = stringResource(id = R.string.ButtonAdd))
+    }, titleText = stringResource(id = R.string.buttonAdd))
 }
 
 
@@ -114,7 +114,7 @@ fun ItemsList(
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(30.dp), horizontalArrangement = Arrangement.Absolute.Center) {
-            Text(text = stringResource(id = R.string.EmptyList), textAlign = TextAlign.Center, fontSize = 30.sp)
+            Text(text = stringResource(id = R.string.emptyList), textAlign = TextAlign.Center, fontSize = 30.sp)
         }
     } else {
         LazyColumn {
@@ -141,14 +141,14 @@ fun ItemsList(
                 Button(onClick = { show = false
                     showDeleteDialog = true
                 }) {
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = stringResource(id = R.string.DeleteButton) , modifier =  Modifier.padding(20.dp, 5.dp))
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = stringResource(id = R.string.deleteButton) , modifier =  Modifier.padding(20.dp, 5.dp))
                 }
 
                 Button(onClick = {editItem(shownItem)
                     show = false
                 }, modifier = Modifier.padding(15.dp, 0.dp)) {
 
-                    Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(id = R.string.EditButton) , modifier =  Modifier.padding(20.dp, 5.dp))
+                    Icon(imageVector = Icons.Default.Edit, contentDescription = stringResource(id = R.string.editButton) , modifier =  Modifier.padding(20.dp, 5.dp))
                 }
 
 
@@ -156,7 +156,7 @@ fun ItemsList(
                 Button(onClick = {addItems(shownItem)
                     show = false
                 }) {
-                    Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.ButtonRemove) , modifier =  Modifier.padding(20.dp, 5.dp))
+                    Icon(imageVector = Icons.Default.Add, contentDescription = stringResource(id = R.string.buttonRemove) , modifier =  Modifier.padding(20.dp, 5.dp))
                 }
             }
 
@@ -165,7 +165,7 @@ fun ItemsList(
                     show = false
                 }, modifier = Modifier.padding(0.dp, 15.dp)
                 ) {
-                    Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.ButtonAdd) , modifier =  Modifier.padding(20.dp, 5.dp))
+                    Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.buttonAdd) , modifier =  Modifier.padding(20.dp, 5.dp))
                 }
             }
         }

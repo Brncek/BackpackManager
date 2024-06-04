@@ -88,7 +88,7 @@ fun BackpackScreen(
         floatingActionButton = {
             if (allItemsWeight > 0) {
                 FloatingActionButton(onClick = {show = true}) {
-                    Icon(imageVector =  Icons.Default.Info, contentDescription = stringResource(id = R.string.ShowStatisticts))
+                    Icon(imageVector =  Icons.Default.Info, contentDescription = stringResource(id = R.string.showStatisticts))
                 }
             }
         }
@@ -106,8 +106,8 @@ fun BackpackScreen(
                 typeCounts = weightsUiState.typeWeightList,
                 itemCount = allItemsWeight)
 
-    GetTextDialog(title = stringResource(id = R.string.CreateGroup),
-                  textBoxTitle =stringResource(R.string.GroupName), openDialog = showGroupAdd, onShowChange = { showGroupAdd = false }) {
+    GetTextDialog(title = stringResource(id = R.string.createGroup),
+                  textBoxTitle =stringResource(R.string.groupName), openDialog = showGroupAdd, onShowChange = { showGroupAdd = false }) {
         coroutineScope.launch { backpackViewModel.createNewGroup(it) }
     }
 
@@ -198,7 +198,7 @@ fun BackpackItemsList(
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(30.dp), horizontalArrangement = Arrangement.Absolute.Center) {
-            Text(text = stringResource(id = R.string.BackpackEmpty), textAlign = TextAlign.Center, fontSize = 30.sp)
+            Text(text = stringResource(id = R.string.backpackEmpty), textAlign = TextAlign.Center, fontSize = 30.sp)
         }
     } else {
         LazyColumn {
@@ -226,7 +226,7 @@ fun BackpackItemsList(
             }, modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)) {
-                Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.ButtonAdd) , modifier =  Modifier.padding(20.dp, 5.dp))
+                Icon(imageVector = Icons.Default.Clear, contentDescription = stringResource(id = R.string.buttonAdd) , modifier =  Modifier.padding(20.dp, 5.dp))
             }
         }
     }

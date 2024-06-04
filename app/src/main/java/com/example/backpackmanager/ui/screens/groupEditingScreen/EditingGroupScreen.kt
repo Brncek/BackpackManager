@@ -34,7 +34,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontVariation.weight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -85,7 +84,7 @@ fun EditingGroupScreen (
                          }, modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)) {
-            Text(text = stringResource(id = R.string.AddToBackpack))
+            Text(text = stringResource(id = R.string.addToBackpack))
         }
 
         Button(onClick = { coroutineScope.launch { viewModel.replaceBackpack()}
@@ -93,7 +92,7 @@ fun EditingGroupScreen (
                          } , modifier = Modifier
             .fillMaxWidth()
             .padding(10.dp)) {
-            Text(text = stringResource(id = R.string.ReplaceBackpack))
+            Text(text = stringResource(id = R.string.replaceBackpack))
         }
 
         Row (modifier = Modifier.fillMaxWidth()){
@@ -104,7 +103,7 @@ fun EditingGroupScreen (
                 .fillMaxWidth()
                 .padding(10.dp)) {
                 Icon(imageVector = Icons.Default.Delete,
-                    contentDescription = stringResource(id = R.string.GroupDeleteButton))
+                    contentDescription = stringResource(id = R.string.groupDeleteButton))
             }
 
 
@@ -113,14 +112,14 @@ fun EditingGroupScreen (
                 .fillMaxWidth()
                 .padding(10.dp)) {
                 Icon(imageVector = Icons.Default.Edit,
-                    contentDescription = stringResource(id = R.string.EditNameGroupButton))
+                    contentDescription = stringResource(id = R.string.editNameGroupButton))
             }
         }
 
 
         HorizontalDivider(thickness = 3.dp, modifier = Modifier.padding(10.dp))
 
-        Text(text = stringResource(R.string.GroupItems), modifier = Modifier
+        Text(text = stringResource(R.string.groupItems), modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 5.dp, 0.dp, 5.dp), fontSize = 20.sp,
             textAlign = TextAlign.Center)
@@ -139,7 +138,7 @@ fun EditingGroupScreen (
                         .fillMaxWidth()
                         .padding(10.dp)) {
                     Icon(imageVector = Icons.Default.Delete,
-                        contentDescription = stringResource(id = R.string.GroupDeleteButton))
+                        contentDescription = stringResource(id = R.string.groupDeleteButton))
                 }
 
                 Button(onClick = { showDetail = false; showEditAmount = true }, modifier = Modifier
@@ -147,13 +146,13 @@ fun EditingGroupScreen (
                     .fillMaxWidth()
                     .padding(10.dp)) {
                     Icon(imageVector = Icons.Default.Edit,
-                        contentDescription = stringResource(id = R.string.EditNameGroupButton))
+                        contentDescription = stringResource(id = R.string.editNameGroupButton))
                 }
             }
         }
 
-        GetTextDialog(title = stringResource(id = R.string.ChangeGroupName),
-            textBoxTitle =stringResource(id = R.string.GroupName) , openDialog = changeNameDialog,
+        GetTextDialog(title = stringResource(id = R.string.changeGroupName),
+            textBoxTitle =stringResource(id = R.string.groupName) , openDialog = changeNameDialog,
             onShowChange = { changeNameDialog = false }) {
             navigateBack()
             coroutineScope.launch {
@@ -175,7 +174,7 @@ fun EditingGroupScreen (
 
         AddDialog(openDialog = showEditAmount, onShowChange = { showEditAmount = false }, confirmAction = {
             coroutineScope.launch {viewModel.changeItemAmount(detailItem.id, it)}
-        }, titleText = stringResource(id = R.string.ChangeAmount))
+        }, titleText = stringResource(id = R.string.changeAmount))
     }
 }
 
@@ -185,7 +184,7 @@ fun GroupItemList(
     itemWeights :List<ItemGroupAmount>,
     onClick: (Item) -> Unit = {}
 ) {
-    var itemWeightsMap : MutableMap<Int, Int>  = mutableMapOf()
+    val itemWeightsMap : MutableMap<Int, Int>  = mutableMapOf()
 
     itemWeights.forEach{
         itemWeightsMap[it.id] = it.amount

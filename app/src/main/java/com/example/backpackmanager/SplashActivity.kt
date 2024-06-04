@@ -72,7 +72,7 @@ fun SplashScreen() {
     )
     
     Column(verticalArrangement = Arrangement.Top, modifier = Modifier.fillMaxSize()) {
-        Text(text = stringResource(id = R.string.AppName), fontSize = 45.sp, textAlign = TextAlign.Center
+        Text(text = stringResource(id = R.string.app_name), fontSize = 45.sp, textAlign = TextAlign.Center
             , modifier = Modifier
                 .fillMaxWidth()
                 .padding(5.dp, 70.dp)

@@ -71,7 +71,7 @@ fun GroupsList(
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(30.dp), horizontalArrangement = Arrangement.Absolute.Center) {
-            Text(text = stringResource(id = R.string.NoGroups), textAlign = TextAlign.Center, fontSize = 30.sp)
+            Text(text = stringResource(id = R.string.noGroups), textAlign = TextAlign.Center, fontSize = 30.sp)
         }
     } else {
         LazyColumn {

@@ -53,7 +53,7 @@ fun SetingsScreen(typesViewModel : TypesViewModel = viewModel(factory = ViewMode
     val typesUiState by typesViewModel.typeUiState.collectAsState()
 
     Column {
-        Text(text = stringResource(R.string.Types), modifier = Modifier
+        Text(text = stringResource(R.string.types), modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 25.dp, 0.dp, 5.dp), fontSize = 30.sp,
             textAlign = TextAlign.Center)
@@ -63,7 +63,7 @@ fun SetingsScreen(typesViewModel : TypesViewModel = viewModel(factory = ViewMode
                          }, modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp)) {
-            Text(text = stringResource(id = R.string.AddTypeButton))
+            Text(text = stringResource(id = R.string.addTypeButton))
         }
 
         HorizontalDivider(thickness = 3.dp, modifier = Modifier.padding(10.dp))
@@ -76,7 +76,7 @@ fun SetingsScreen(typesViewModel : TypesViewModel = viewModel(factory = ViewMode
     }
 
 
-    GetTextDialog(title = stringResource(id = R.string.AddTypeButton),
+    GetTextDialog(title = stringResource(id = R.string.addTypeButton),
         textBoxTitle =stringResource(id = R.string.itemName) , openDialog = openAddDialog,
         onShowChange = { openAddDialog = false }) {
 
@@ -98,7 +98,7 @@ fun TypeCard(type : Type, delete: (Type) -> Unit = {} ) {
             Text(text = type.typeName, textAlign = TextAlign.Left, modifier = Modifier.padding(10.dp))
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { delete(type) }) {
-               Icon(imageVector = Icons.Default.Close , contentDescription = stringResource(id = R.string.DeleteButton))
+               Icon(imageVector = Icons.Default.Close , contentDescription = stringResource(id = R.string.deleteButton))
             }
         }
     }

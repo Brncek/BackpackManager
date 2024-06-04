@@ -179,7 +179,7 @@ fun DetailSheet(show: Boolean,
                 OutlinedTextField(  value = item.type,
                     onValueChange = {},
                     readOnly = true,
-                    label = { Text( text = stringResource(id = R.string.TypeText),
+                    label = { Text( text = stringResource(id = R.string.typeText),
                         color = MaterialTheme.colorScheme.inversePrimary
                     )},
                     enabled = false,
@@ -213,7 +213,7 @@ fun ItemCard(item: Item, modifier: Modifier, showAdded: Boolean) {
             if (showAdded && item.addedToBackpack > 0) {
                 FilterChip(
                     onClick = {},
-                    label = { Text(stringResource(id = R.string.Added)) },
+                    label = { Text(stringResource(id = R.string.added)) },
                     selected = false,
                     leadingIcon = {
                         Icon(
@@ -260,7 +260,7 @@ fun DeleteDialog(
 
         AlertDialog (
             title = {
-                Text(text = stringResource(id = R.string.DeleteMessage), textAlign = TextAlign.Center)
+                Text(text = stringResource(id = R.string.deleteMessage), textAlign = TextAlign.Center)
             },
 
             onDismissRequest = {
@@ -273,7 +273,7 @@ fun DeleteDialog(
                         onShowChange()
                     }
                 ) {
-                    Text(stringResource(id = R.string.Confirm))
+                    Text(stringResource(id = R.string.confirm))
                 }
             },
             dismissButton = {
@@ -282,7 +282,7 @@ fun DeleteDialog(
                         onShowChange()
                     },
                 ) {
-                    Text(stringResource(id = R.string.Dismiss))
+                    Text(stringResource(id = R.string.dismiss))
                 }
             },
             text = {
@@ -320,7 +320,7 @@ fun AddDialog(
                         confirmAction(dialogString.toInt())
                     }
                 ) {
-                    Text(stringResource(id = R.string.Confirm))
+                    Text(stringResource(id = R.string.confirm))
                 }
             },
             dismissButton = {
@@ -329,14 +329,14 @@ fun AddDialog(
                         onShowChange()
                     }
                 ) {
-                    Text(stringResource(id = R.string.Dismiss))
+                    Text(stringResource(id = R.string.dismiss))
                 }
             },
             text = {
                 OutlinedTextField(
                     value = dialogString,
                     onValueChange = {dialogString = it},
-                    label = { Text(text = stringResource(id = R.string.Amount) ) },
+                    label = { Text(text = stringResource(id = R.string.amount) ) },
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     textStyle = TextStyle(),
                     modifier = Modifier
@@ -378,7 +378,7 @@ fun GetTextDialog(
                         confirmAction(dialogString)
                     }
                 ) {
-                    Text(stringResource(id = R.string.Confirm))
+                    Text(stringResource(id = R.string.confirm))
                 }
             },
             dismissButton = {
@@ -387,7 +387,7 @@ fun GetTextDialog(
                         onShowChange()
                     }
                 ) {
-                    Text(stringResource(id = R.string.Dismiss))
+                    Text(stringResource(id = R.string.dismiss))
                 }
             },
             text = {
