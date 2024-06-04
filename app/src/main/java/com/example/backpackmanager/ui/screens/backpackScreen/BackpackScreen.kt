@@ -156,7 +156,12 @@ fun TypeLine(
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(25.dp, 0.dp)) {
-            Text(text = type, modifier = Modifier.width(75.dp), textAlign = TextAlign.Left)
+            
+            if (type == "Other") {
+                Text(text = stringResource(id = R.string.typeOther), modifier = Modifier.width(75.dp), textAlign = TextAlign.Left)
+            } else {
+                Text(text = type, modifier = Modifier.width(75.dp), textAlign = TextAlign.Left)
+            }
 
             Spacer(modifier = Modifier.weight(1f))
 

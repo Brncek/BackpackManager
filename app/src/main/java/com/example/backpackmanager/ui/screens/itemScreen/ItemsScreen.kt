@@ -174,12 +174,3 @@ fun ItemsList(
     DeleteDialog(openDialog = showDeleteDialog, onShowChange = { showDeleteDialog = false }, confirmAction = {deleteItem(shownItem)})
 }
 
-
-fun validateAddNumber(numberString:String) : Boolean {
-    try {
-        numberString.toInt()
-    } catch (e : Exception) {
-        return false
-    }
-    return numberString.isNotBlank()
-}

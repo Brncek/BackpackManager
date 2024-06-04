@@ -60,7 +60,6 @@ import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 import com.example.backpackmanager.R
 import com.example.backpackmanager.database.Item
-import com.example.backpackmanager.ui.screens.itemScreen.validateAddNumber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -405,4 +404,14 @@ fun GetTextDialog(
             }
         )
     }
+}
+
+
+fun validateAddNumber(numberString:String) : Boolean {
+    try {
+        numberString.toInt()
+    } catch (e : Exception) {
+        return false
+    }
+    return numberString.isNotBlank() && numberString.toInt() > 0
 }
