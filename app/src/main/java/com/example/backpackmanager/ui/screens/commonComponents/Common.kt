@@ -154,8 +154,9 @@ fun DetailSheet(show: Boolean,
             },
             sheetState = sheetState
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()
-                                                                        .verticalScroll(scrollState)) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(scrollState)) {
                 Text(text = item.name, color = MaterialTheme.colorScheme.inversePrimary, fontSize = 25.sp)
                 Image(painter = rememberAsyncImagePainter(  model = item.picturePath.toUri(),
                                                             error = painterResource(id = R.drawable.noimage),
@@ -175,7 +176,13 @@ fun DetailSheet(show: Boolean,
                                 .padding(10.dp, 5.dp, 10.dp, 5.dp)
                 )
 
-                OutlinedTextField(  value = item.type,
+                val type = if (item.type == "Other") {
+                    stringResource(id = R.string.typeOther)
+                } else {
+                    item.type
+                }
+
+                OutlinedTextField(  value = type,
                     onValueChange = {},
                     readOnly = true,
                     label = { Text( text = stringResource(id = R.string.typeText),

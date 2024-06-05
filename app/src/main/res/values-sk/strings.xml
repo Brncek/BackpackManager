@@ -46,4 +46,6 @@
     <string name="deleteItemFromGroupButton">Odstrániť položku zo skupiny</string>
     <string name="changeGroupName">Zmeniť názov skupiny</string>
     <string name="types">Typy</string>
+    <string name="removeEverithing">Odstraniť všetko z batohu</string>
+    <string name="backpackWeight">Váha batohu</string>
 </resources>

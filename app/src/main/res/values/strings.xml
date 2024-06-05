@@ -46,4 +46,6 @@
     <string name="deleteItemFromGroupButton">Delete item from group</string>
     <string name="changeGroupName">Change group name</string>
     <string name="types">Types</string>
+    <string name="removeEverithing">Remove everithing from backpack</string>
+    <string name="backpackWeight">Backpack weight</string>
 </resources>

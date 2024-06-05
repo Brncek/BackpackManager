@@ -119,7 +119,9 @@ fun ItemsList(
     } else {
         LazyColumn {
             items(items = itemList, key = { it.id }) {
-                    item -> if(item.name.lowercase(Locale.getDefault()).contains(search) || search.isBlank()) {
+                    item -> if(item.name.lowercase(Locale.getDefault()).contains(search) || search.isBlank()
+                || item.type.lowercase(Locale.getDefault()).contains(search) || (item.type == "Other" && (stringResource(
+                    id = R.string.typeOther)).contains(search))) {
                 ItemCard(item = item, showAdded = true,
                     modifier = Modifier
                         .padding(10.dp)

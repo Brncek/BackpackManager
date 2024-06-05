@@ -87,8 +87,15 @@ fun BackpackScreen(
         },
         floatingActionButton = {
             if (allItemsWeight > 0) {
-                FloatingActionButton(onClick = {show = true}) {
-                    Icon(imageVector =  Icons.Default.Info, contentDescription = stringResource(id = R.string.showStatisticts))
+                Column {
+
+                    FloatingActionButton(onClick = {coroutineScope.launch { backpackViewModel.emptyBackpack() }}) {
+                        Icon(imageVector =  Icons.Default.Clear, contentDescription = stringResource(id = R.string.removeEverithing))
+                    }
+
+                    FloatingActionButton(onClick = {show = true}, modifier = Modifier.padding(0.dp, 10.dp,0.dp,0.dp)) {
+                        Icon(imageVector =  Icons.Default.Info, contentDescription = stringResource(id = R.string.showStatisticts))
+                    }
                 }
             }
         }
@@ -104,7 +111,7 @@ fun BackpackScreen(
 
     InfoSheet(show = show, onShowChange = { show = false },
                 typeCounts = weightsUiState.typeWeightList,
-                itemCount = allItemsWeight)
+                backpackWeight = allItemsWeight)
 
     GetTextDialog(title = stringResource(id = R.string.createGroup),
                   textBoxTitle =stringResource(R.string.groupName), openDialog = showGroupAdd, onShowChange = { showGroupAdd = false }) {
@@ -119,7 +126,7 @@ fun InfoSheet(
     show: Boolean,
     onShowChange: () -> Unit,
     typeCounts: List<WeightType>,
-    itemCount: Int
+    backpackWeight: Int
 ) {
     if (show) {
         val sheetState = rememberModalBottomSheetState()
@@ -135,8 +142,14 @@ fun InfoSheet(
                 .fillMaxWidth()
                 .padding(0.dp, 0.dp, 0.dp, 45.dp)
                 .verticalScroll(scrollState)) {
+
+                Row (modifier = Modifier.padding(25.dp,5.dp)) {
+                    Text(text = stringResource(id = R.string.backpackWeight) + ": ", textAlign = TextAlign.Left, fontSize = 20.sp)
+                    Text(text =  backpackWeight.toString() + "g", textAlign = TextAlign.Left, fontSize = 20.sp)
+                }
+                
                 typeCounts.forEach {
-                    TypeLine(weight = it.totalWeight, type = it.type, percentage = (it.totalWeight.toDouble() / itemCount))
+                    TypeLine(weight = it.totalWeight, type = it.type, percentage = (it.totalWeight.toDouble() / backpackWeight.toDouble()))
                 }
             }
         }
@@ -158,15 +171,15 @@ fun TypeLine(
             .padding(25.dp, 0.dp)) {
             
             if (type == "Other") {
-                Text(text = stringResource(id = R.string.typeOther), modifier = Modifier.width(75.dp), textAlign = TextAlign.Left)
+                Text(text = stringResource(id = R.string.typeOther), modifier = Modifier.width(150.dp), textAlign = TextAlign.Left)
             } else {
-                Text(text = type, modifier = Modifier.width(75.dp), textAlign = TextAlign.Left)
+                Text(text = type, modifier = Modifier.width(150.dp), textAlign = TextAlign.Left)
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
             Text(text = weight.toString() + "g", modifier = Modifier.width(75.dp), textAlign = TextAlign.Right)
-            if (percentage < 0.1) {
+            if (percentage < 0.01) {
                 Text(text = "< 1%", modifier = Modifier
                     .width(55.dp)
                     .padding(5.dp, 0.dp), textAlign = TextAlign.Right)
@@ -208,7 +221,9 @@ fun BackpackItemsList(
     } else {
         LazyColumn {
             items(items = itemList, key = { it.id }) {
-                    item -> if(item.name.lowercase(Locale.getDefault()).contains(search) || search.isBlank()) {
+                    item -> if(item.name.lowercase(Locale.getDefault()).contains(search) || search.isBlank()
+                || item.type.lowercase(Locale.getDefault()).contains(search) || (item.type == "Other" && (stringResource(
+                    id = R.string.typeOther)).contains(search))) {
                 ItemCard(item = item, showAdded = false,
                     modifier = Modifier
                         .padding(10.dp)

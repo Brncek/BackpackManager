@@ -103,8 +103,15 @@ fun EditingScreen (
         Row(modifier = Modifier.fillMaxWidth()) {
             Text(text = stringResource(id = R.string.typeText), modifier = Modifier
                 .padding(15.dp, 5.dp, 0.dp, 5.dp), fontSize = 30.sp)
-            Text(text = editingScreenViewModel.itemUiState.itemDetails.type, modifier = Modifier
-                .padding(10.dp, 5.dp), fontSize = 30.sp)
+
+            if (editingScreenViewModel.itemUiState.itemDetails.type == "Other") {
+                Text(text = stringResource(id = R.string.typeOther), modifier = Modifier
+                    .padding(10.dp, 5.dp), fontSize = 30.sp)
+            } else {
+                Text(text = editingScreenViewModel.itemUiState.itemDetails.type, modifier = Modifier
+                    .padding(10.dp, 5.dp), fontSize = 30.sp)
+            }
+
         }
 
         Button(onClick = {show = true}, modifier = Modifier

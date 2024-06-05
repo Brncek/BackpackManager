@@ -53,6 +53,10 @@ class BackpackViewModel(private val dataRepository: DataRepository) : ViewModel(
     suspend fun createNewGroup(name: String) {
         dataRepository.newGroup(name)
     }
+
+    suspend fun emptyBackpack() {
+        dataRepository.removeAllItems()
+    }
 }
 
 data class ItemWeightsUiState(
