@@ -119,7 +119,6 @@ fun Context.copyFileToAppStorage(fileUri: Uri): Uri? {
     val contentResolver = contentResolver
     val inputStream: InputStream? = contentResolver.openInputStream(fileUri)
 
-    // Get the file name
     var fileName: String? = null
     contentResolver.query(fileUri, null, null, null, null)?.use { cursor ->
         val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
@@ -129,7 +128,6 @@ fun Context.copyFileToAppStorage(fileUri: Uri): Uri? {
     }
 
     if (fileName == null) return null
-
 
     val outputFile = File(filesDir, fileName!!)
     val outputStream: OutputStream = FileOutputStream(outputFile)

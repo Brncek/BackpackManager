@@ -67,6 +67,7 @@ fun EditingGroupScreen (
     var showDetail by remember { mutableStateOf(false)}
     var showEditAmount by remember { mutableStateOf(false)}
     var showDeleteDialog by remember { mutableStateOf(false)}
+    var showDeleteDialogGroup by remember { mutableStateOf(false)}
     var changeNameDialog by remember { mutableStateOf(false)}
     var detailItem by remember { mutableStateOf(Item())}
 
@@ -96,9 +97,7 @@ fun EditingGroupScreen (
         }
 
         Row (modifier = Modifier.fillMaxWidth()){
-            Button(onClick = { coroutineScope.launch { viewModel.deleteGroup() }
-                                            navigateBack()
-                                       }, modifier = Modifier
+            Button(onClick = { showDeleteDialogGroup = true }, modifier = Modifier
                 .weight(0.5f)
                 .fillMaxWidth()
                 .padding(10.dp)) {
@@ -161,15 +160,12 @@ fun EditingGroupScreen (
         }
 
         DeleteDialog(openDialog = showDeleteDialog, onShowChange = { showDeleteDialog = false }) {
-            coroutineScope.launch {
-                viewModel.deleteItemFromGroup(detailItem.id)
+            coroutineScope.launch { viewModel.deleteItemFromGroup(detailItem.id) }
+        }
 
-
-            }
-
-            if (items.itemList.isEmpty()) { //TODO:: TEST if
-                navigateBack()
-            }
+        DeleteDialog(openDialog = showDeleteDialogGroup, onShowChange = { showDeleteDialogGroup = false }) {
+            coroutineScope.launch { viewModel.deleteGroup() }
+            navigateBack()
         }
 
         AddDialog(openDialog = showEditAmount, onShowChange = { showEditAmount = false }, confirmAction = {

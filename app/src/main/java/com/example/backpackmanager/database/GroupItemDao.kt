@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface GroupItemDao {
 
-    @Query("select distinct groupName from groupItems")
+    @Query("select distinct groupName from groupItems order by groupName asc")
     fun getGroupsNames() :Flow<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -28,7 +28,8 @@ interface GroupItemDao {
                 "select id, addedToBackpack, :name from items where addedToBackpack > 0 ")
     suspend fun newGroup(name: String)
 
-    @Query("UPDATE items SET addedToBackpack = (SELECT amount FROM groupItems WHERE itemId = items.id and groupName = :groupName) " +
+    @Query("UPDATE items SET addedToBackpack = " +
+            "((SELECT amount FROM groupItems WHERE itemId = items.id and groupName = :groupName) + addedToBackpack)" +
             "where id in  (select itemId from groupItems where groupName = :groupName) ")
     suspend fun addGroupToBackpack(groupName: String)
 

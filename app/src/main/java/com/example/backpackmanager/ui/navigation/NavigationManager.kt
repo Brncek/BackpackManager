@@ -44,8 +44,10 @@ fun NavigationManager(
                         editorNavigate = { navController.navigate(route = ItemEditScreenDestination.route) },
                         bottomBar = { BottomBar(selectedTab = selectedItem,
                                                 firstTabAction = {},
-                                                secondTabAction = { navController.navigate(route = BackpackScreenDestination.route)},
-                                                thirdTabAction = { navController.navigate(route = GroupScreenDestination.route)} )})
+                                                secondTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)
+                                                                    navController.navigate(route = BackpackScreenDestination.route)},
+                                                thirdTabAction = {  navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)
+                                                                    navController.navigate(route = GroupScreenDestination.route)} )})
         }
 
         composable(route = BackpackScreenDestination.route) {
@@ -65,7 +67,8 @@ fun NavigationManager(
             GroupScreen(setingsButtonAction =  { navController.navigate(route = SetingsScreenDestination.route) },
                         bottomBar = { BottomBar(selectedTab = selectedItem,
                                                 firstTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)},
-                                                secondTabAction = { navController.navigate(route = BackpackScreenDestination.route)},
+                                                secondTabAction = { navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)
+                                                                    navController.navigate(route = BackpackScreenDestination.route)},
                                                 thirdTabAction = {})},
                         editGroupNavigate = { navController.navigate(route = EditingGroupScreenDestination.route) }
                         )
@@ -81,7 +84,7 @@ fun NavigationManager(
 
         composable(route = EditingGroupScreenDestination.route) {
             EditingGroupScreen(navigateToBackpack = {navController.popBackStack(route = ItemsScreenDestination.route, inclusive = false)
-                                               navController.navigate(route = BackpackScreenDestination.route) },
+                                                     navController.navigate(route = BackpackScreenDestination.route) },
                                navigateBack = {navController.popBackStack(route = GroupScreenDestination.route, inclusive = false)})
         }
     }
